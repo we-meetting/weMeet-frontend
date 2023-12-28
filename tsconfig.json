@@ -20,5 +20,5 @@
       "src/*": ["src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "commitlint.config.js"]
 }

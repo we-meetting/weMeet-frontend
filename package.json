@@ -2,7 +2,7 @@
   "name": "wemeet-frontend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -43,5 +43,11 @@
     "vite": "^5.0.8",
     "vite-plugin-remove-console": "^2.2.0",
     "vite-tsconfig-paths": "^4.2.2"
+  },
+  "lint-staged": {
+    "**/*.+(ts|tsx|js|jsx|json)": [
+      "eslint --fix --cache",
+      "prettier --write"
+    ]
   }
 }
