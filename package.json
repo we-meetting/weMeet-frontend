@@ -1,5 +1,18 @@
 {
   "name": "wemeet-frontend",
+  "repository": "https://github.com/we-meetting/weMeet-frontend.git",
+  "maintainers": [
+    {
+      "name": "GeunWon Choi",
+      "email": "kidjustinchoi@gmail.com",
+      "url": "https://github.com/choi138"
+    },
+    {
+      "name": "ParkYeo June",
+      "email": "milgamfruit@gmail.com",
+      "url": "https://github.com/milgam06"
+    }
+  ],
   "private": true,
   "version": "0.0.0",
   "type": "commonjs",
