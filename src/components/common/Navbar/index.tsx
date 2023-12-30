@@ -8,6 +8,7 @@ import * as S from './styled';
 
 export const Navbar: React.FC = () => {
   const theme = useTheme();
+  const ContentsList: string[] = ['살펴보기', '플랜', '맛집'];
   return (
     <>
       <S.NavbarContainer>
@@ -18,15 +19,11 @@ export const Navbar: React.FC = () => {
           </Text>
         </S.NavbarLogoContainer>
         <S.NavbarContentContainer>
-          <Text size={1.6} weight={500}>
-            살펴보기
-          </Text>
-          <Text size={1.6} weight={500}>
-            플랜
-          </Text>
-          <Text size={1.6} weight={500}>
-            맛집
-          </Text>
+          {ContentsList.map((key) => (
+            <Text size={1.6} weight={500}>
+              {key}
+            </Text>
+          ))}
         </S.NavbarContentContainer>
         <S.NavbarLoginWrapper>
           <Text size={1.6} weight={300} style={{ color: theme.white }}>
