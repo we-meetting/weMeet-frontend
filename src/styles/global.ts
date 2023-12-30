@@ -28,9 +28,7 @@ export const globalStyle = css`
   #root,
   #__next {
     font-size: 14px;
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-      format('woff');
+    font-family: 'Pretendard Variable';
     font-weight: 400;
     font-style: normal;
     letter-spacing: -0.03em;
