@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 
 import { Logo } from 'src/assets';
+import { NAVBAR_CONTENT_LIST } from 'src/constants';
 
 import { Text } from '../Text';
 
@@ -8,7 +9,6 @@ import * as S from './styled';
 
 export const Navbar: React.FC = () => {
   const theme = useTheme();
-  const ContentsList: string[] = ['살펴보기', '플랜', '맛집'];
   return (
     <>
       <S.NavbarContainer>
@@ -19,9 +19,9 @@ export const Navbar: React.FC = () => {
           </Text>
         </S.NavbarLogoContainer>
         <S.NavbarContentContainer>
-          {ContentsList.map((key) => (
+          {NAVBAR_CONTENT_LIST.map(({ text }) => (
             <Text size={1.6} weight={500}>
-              {key}
+              {text}
             </Text>
           ))}
         </S.NavbarContentContainer>
