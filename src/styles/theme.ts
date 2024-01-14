@@ -7,6 +7,7 @@ export const lightTheme: Theme = {
   background: '#FEFEFE',
   primary: '#CC8561',
   secondary: '#344960',
+  tertiary: '#8C7B6E',
 };
 
 export const darkTheme: Theme = {
@@ -16,4 +17,5 @@ export const darkTheme: Theme = {
   background: '#2A2B2E',
   primary: '#CC8561',
   secondary: '#344960',
+  tertiary: '#8C7B6E',
 };

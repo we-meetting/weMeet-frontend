@@ -26,6 +26,7 @@ export const NavbarContentContainer = styled.div`
   justify-content: center;
   align-items: center;
   column-gap: 5rem;
+  cursor: pointer;
 `;
 
 export const NavbarLoginWrapper = styled.div`
@@ -36,4 +37,5 @@ export const NavbarLoginWrapper = styled.div`
   border: none;
   border-radius: 5rem;
   padding: 1.2rem 1.6rem;
+  cursor: pointer;
 `;

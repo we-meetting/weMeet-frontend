@@ -8,5 +8,6 @@ declare module '@emotion/react' {
     background: string;
     primary: string;
     secondary: string;
+    tertiary: string;
   }
 }
