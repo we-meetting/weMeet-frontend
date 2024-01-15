@@ -14,6 +14,7 @@ export const NavbarInnerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 100%;
 
   width: 100%;
   max-width: 1140px;
@@ -28,8 +29,9 @@ export const NavbarInnerContainer = styled.div`
 `;
 
 export const NavbarLogoContainer = styled.div`
+  flex: 1 1 0%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   column-gap: 1rem;
 `;
@@ -49,11 +51,18 @@ export const NavbarContentContainer = styled.div`
 
 export const NavbarLoginWrapper = styled.div`
   display: flex;
+  flex: 1 1 0%;
+  justify-content: flex-end;
+`;
+
+export const NavbarLoginInnerWrapper = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.primary};
   border: none;
   border-radius: 5rem;
-  padding: 1.2rem 1.6rem;
+  padding: 0.8rem 1rem;
   cursor: pointer;
+  width: fit-content;
 `;

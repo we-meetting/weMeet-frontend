@@ -14,9 +14,15 @@ export const ModalOverlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
+export const ModalCloseContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
 export const ModalContainer = styled(motion.div)`
   min-width: 32rem;
-  padding: 2.8rem;
+  padding: 2rem;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.white};
   z-index: 999;

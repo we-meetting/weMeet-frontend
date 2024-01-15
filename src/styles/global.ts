@@ -36,16 +36,30 @@ export const globalStyle = (theme: Theme) => css`
     letter-spacing: -0.03em;
   }
 
-  @media screen and (max-width: 767px) {
-    html {
-      font-size: 9px;
-    }
-    br.mobile-only {
-      display: block;
+  html,
+  body {
+    @media screen and (min-width: 2000px) {
+      font-size: 16px;
     }
 
-    br.desktop-only {
-      display: none;
+    @media screen and (max-width: 2000px) and (min-width: 1500px) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: 1500px) and (min-width: 1000px) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: 1000px) and (min-width: 700px) {
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: 700px) and (min-width: 500px) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: 500px) and (min-width: 300px) {
+      font-size: 12px;
     }
   }
 `;

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
+import { IoSearchOutline } from 'react-icons/io5';
 
-import { useTheme } from '@emotion/react';
-
-import { SearchIcon } from 'src/assets';
 import { Text } from 'src/components/common/Text';
 import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
 import { useModal } from 'src/providers';
@@ -17,8 +15,6 @@ export const Searchbar: React.FC = () => {
   const onChangeSearchSubject = (textValue: string) => {
     setSearchSubject(textValue);
   };
-
-  // const { modalState, switchModalOpen } = useModalStore();
 
   let dynamicPlaceholder = '';
   let dynamicTitle = '';
@@ -49,7 +45,7 @@ export const Searchbar: React.FC = () => {
     <>
       <S.SearchContentsContainer>
         <S.SearchTitleWrapper>
-          <Text size={2.8} weight={800}>
+          <Text size={2.8} weight={700}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
@@ -57,20 +53,15 @@ export const Searchbar: React.FC = () => {
           {SEARCHBAR_CONTENT_LIST.map(({ text, image }) => (
             <S.SearchSubjectWrapper onClick={() => onChangeSearchSubject(text)} key={text}>
               <S.SearchSubjectIcon src={image} alt="아이콘" />
-              <Text size={1.4} weight={600}>
+              <Text size={1.1} weight={600}>
                 {text}
               </Text>
             </S.SearchSubjectWrapper>
           ))}
         </S.SearchSubjectContainer>
-        <S.SearchbarContainer
-          onClick={
-            onSearchbarModalOpen
-            // () => switchModalOpen('searchActive')
-          }
-        >
+        <S.SearchbarContainer onClick={onSearchbarModalOpen}>
           <S.SearchbarInputContainer>
-            <S.SearchbarIcon src={SearchIcon} />
+            <IoSearchOutline size={'1.6rem'} />
             <S.SearchbarInputWrapper>
               <Text size={1.1} weight={400} style={{ color: `rgb(133, 133, 133) ` }}>
                 {dynamicPlaceholder}
@@ -84,11 +75,6 @@ export const Searchbar: React.FC = () => {
           </S.SearchbarButton>
         </S.SearchbarContainer>
       </S.SearchContentsContainer>
-      {/* {modalState.searchActive && (
-        <DefaultModalLayouts>
-          <SearchModal SearchPlaceholder={dynamicPlaceholder} />
-        </DefaultModalLayouts>
-      )} */}
     </>
   );
 };

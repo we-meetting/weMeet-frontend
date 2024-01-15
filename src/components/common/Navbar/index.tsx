@@ -22,15 +22,17 @@ export const Navbar: React.FC = () => {
           </S.NavbarLogoContainer>
           <S.NavbarContentContainer>
             {NAVBAR_CONTENT_LIST.map(({ text }, i) => (
-              <Text size={1.3} weight={600} key={i}>
+              <Text size={1.1} weight={500} key={i}>
                 {text}
               </Text>
             ))}
           </S.NavbarContentContainer>
           <S.NavbarLoginWrapper>
-            <Text size={1.3} weight={600} style={{ color: theme.white }}>
-              로그인
-            </Text>
+            <S.NavbarLoginInnerWrapper>
+              <Text size={1.2} weight={500} style={{ color: theme.white }}>
+                로그인
+              </Text>
+            </S.NavbarLoginInnerWrapper>
           </S.NavbarLoginWrapper>
         </S.NavbarInnerContainer>
       </S.NavbarContainer>

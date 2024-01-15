@@ -52,7 +52,7 @@ export const SearchbarButton = styled.div`
   background-color: #ddc9be;
   border-radius: 5rem;
   height: 100%;
-  padding: 1rem 1.2rem;
+  padding: 0.8rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   &:hover {
@@ -78,7 +78,7 @@ export const SearchSubjectWrapper = styled.div`
   &:hover {
     border-bottom: 2px solid ${({ theme }) => theme.tertiary};
   }
-`; // tripadvisor 에서는 button으로 하여서 focus를 읽을 수 있게 함
+`;
 
 export const SearchSubjectIcon = styled.img`
   width: 2.2rem;
@@ -91,5 +91,5 @@ export const SearchTitleWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 `;

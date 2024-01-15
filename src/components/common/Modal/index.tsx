@@ -8,25 +8,9 @@ export interface ModalProps {
   children: React.ReactNode;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ children }) => {
-  return (
-    <S.ModalContainer
-      initial={{ opacity: 0.5 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-    >
-      {children}
-    </S.ModalContainer>
-  );
-};
+export const Modal: React.FC<ModalProps> = ({ children }) => {
+  const { close } = useModal();
 
-export interface ModalOverlayProps {
-  children: React.ReactNode;
-}
-
-const ModalOverlay: React.FC<ModalOverlayProps> = ({ children }) => {
-  const { closeAll } = useModal();
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
@@ -42,12 +26,15 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({ children }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div style={{ width: '100%', height: '100%', position: 'absolute' }} onClick={closeAll} />
-      {children}
+      <S.ModalCloseContainer onClick={close} />
+      <S.ModalContainer
+        initial={{ opacity: 0.5 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {children}
+      </S.ModalContainer>
     </S.ModalOverlay>
   );
 };
-
-export const Modal = Object.assign(ModalComponent, {
-  Overlay: ModalOverlay,
-});
