@@ -8,10 +8,12 @@ import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
 import { SearchModal } from 'src/components/modals';
 import { useModalStore } from 'src/stores';
 import { DefaultModalLayouts } from 'src/components/modals/DefaultModal';
+import { useModal } from 'src/providers';
 
 import * as S from './styled';
 
 export const Searchbar: React.FC = () => {
+  const { open } = useModal();
   const theme = useTheme();
 
   const [searchSubject, setSearchSubject] = useState<string>('전체 검색');
@@ -41,6 +43,12 @@ export const Searchbar: React.FC = () => {
       dynamicPlaceholder = 'Search';
   }
 
+  const onSearchbarModalOpen = () => {
+    open({
+      children: <h1>asdf</h1>,
+    });
+  };
+
   return (
     <>
       <S.SearchContentsContainer>
@@ -51,7 +59,7 @@ export const Searchbar: React.FC = () => {
         </S.SearchTitleWrapper>
         <S.SearchSubjectContainer>
           {SEARCHBAR_CONTENT_LIST.map(({ text, image }) => (
-            <S.SearchSubjectWrapper onClick={() => onChangeSearchSubject(text)}>
+            <S.SearchSubjectWrapper onClick={() => onChangeSearchSubject(text)} key={text}>
               <S.SearchSubjectIcon src={image} alt="아이콘" />
               <Text size={1.6} weight={600}>
                 {text}
@@ -59,7 +67,12 @@ export const Searchbar: React.FC = () => {
             </S.SearchSubjectWrapper>
           ))}
         </S.SearchSubjectContainer>
-        <S.SearchbarContainer onClick={() => switchModalOpen('searchActive')}>
+        <S.SearchbarContainer
+          onClick={
+            onSearchbarModalOpen
+            // () => switchModalOpen('searchActive')
+          }
+        >
           <S.SearchbarIcon src={SearchIcon} />
           <S.SearchbarInputWrapper>
             <Text size={1.4} weight={300} style={{ color: theme.secondary }}>
@@ -73,11 +86,11 @@ export const Searchbar: React.FC = () => {
           </S.SearchbarButton>
         </S.SearchbarContainer>
       </S.SearchContentsContainer>
-      {modalState.searchActive && (
+      {/* {modalState.searchActive && (
         <DefaultModalLayouts>
           <SearchModal SearchPlaceholder={dynamicPlaceholder} />
         </DefaultModalLayouts>
-      )}
+      )} */}
     </>
   );
 };

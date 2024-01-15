@@ -21,8 +21,8 @@ export const Navbar: React.FC = () => {
             </Text>
           </S.NavbarLogoContainer>
           <S.NavbarContentContainer>
-            {NAVBAR_CONTENT_LIST.map(({ text }) => (
-              <Text size={1.3} weight={600}>
+            {NAVBAR_CONTENT_LIST.map(({ text }, i) => (
+              <Text size={1.3} weight={600} key={i}>
                 {text}
               </Text>
             ))}

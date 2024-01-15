@@ -1,36 +1,20 @@
-import React from 'react';
-import { Route, Routes, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
 
-import { Global, ThemeProvider, css } from '@emotion/react';
-
-import { DefaultLayout } from 'src/components/layouts';
+import { Global, Theme, ThemeProvider, css } from '@emotion/react';
 
 import { lightTheme, globalStyle } from './styles';
-import { MainPage } from './pages';
+import { ModalProvider } from './providers';
+import { Router } from './Router';
 
 export const App: React.FC = () => {
+  const [theme] = useState<Theme>(lightTheme);
+
   return (
-    <ThemeProvider theme={lightTheme}>
-      <Global
-        styles={[
-          globalStyle,
-          css`
-            color: ${lightTheme.default};
-            background-color: ${lightTheme.background};
-          `,
-        ]}
-      />
-      <Routes>
-        <Route
-          element={
-            <DefaultLayout>
-              <Outlet />
-            </DefaultLayout>
-          }
-        >
-          <Route path="/" element={<MainPage />} />
-        </Route>
-      </Routes>
+    <ThemeProvider theme={theme}>
+      <Global styles={[globalStyle]} />
+      <ModalProvider>
+        <Router />
+      </ModalProvider>
     </ThemeProvider>
   );
 };

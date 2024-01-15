@@ -8,14 +8,9 @@ import * as S from './styled';
 export const MainPage: React.FC = () => {
   return (
     <>
-      {/* <S.MainPageContainer>
+      <S.MainPageContainer>
         <Searchbar />
-      </S.MainPageContainer> */}
-      <Modal.Overlay>
-        <Modal>
-          <h1>asdf</h1>
-        </Modal>
-      </Modal.Overlay>
+      </S.MainPageContainer>
     </>
   );
 };

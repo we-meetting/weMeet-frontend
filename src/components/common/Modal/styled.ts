@@ -19,5 +19,5 @@ export const ModalContainer = styled(motion.div)`
   padding: 2.8rem;
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.white};
-  z-index: 9999;
+  z-index: 999;
 `;

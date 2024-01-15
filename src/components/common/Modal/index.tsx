@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 
+import { useModal } from 'src/providers';
+
 import * as S from './styled';
 
 export interface ModalProps {
@@ -14,7 +16,6 @@ const ModalComponent: React.FC<ModalProps> = ({ children }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <h1>Hello</h1>
       {children}
     </S.ModalContainer>
   );
@@ -25,6 +26,7 @@ export interface ModalOverlayProps {
 }
 
 const ModalOverlay: React.FC<ModalOverlayProps> = ({ children }) => {
+  const { closeAll } = useModal();
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
@@ -40,7 +42,7 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({ children }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div style={{ width: '100%', height: '100%', position: 'absolute' }} />
+      <div style={{ width: '100%', height: '100%', position: 'absolute' }} onClick={closeAll} />
       {children}
     </S.ModalOverlay>
   );

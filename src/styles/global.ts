@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
+import { Theme, css } from '@emotion/react';
 
 import { reset } from './reset';
 
-export const globalStyle = css`
+export const globalStyle = (theme: Theme) => css`
   ${reset}
   * {
     box-sizing: border-box;
@@ -22,6 +22,8 @@ export const globalStyle = css`
   #__next {
     width: 100%;
     height: 100%;
+    background-color: ${theme.background};
+    color: ${theme.default};
   }
 
   #app,

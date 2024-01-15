@@ -5,7 +5,6 @@ export const NavbarContainer = styled.div`
   position: fixed;
   top: 0;
   height: 6rem;
-  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: center;
