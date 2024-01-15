@@ -9,27 +9,32 @@ import * as S from './styled';
 
 export const Navbar: React.FC = () => {
   const theme = useTheme();
+
   return (
     <>
       <S.NavbarContainer>
-        <S.NavbarLogoContainer>
-          <S.NavbarLogoImg src={Logo} alt="hello" />
-          <Text size={2.6} weight={600} style={{ color: theme.secondary }}>
-            weMeet
-          </Text>
-        </S.NavbarLogoContainer>
-        <S.NavbarContentContainer>
-          {NAVBAR_CONTENT_LIST.map(({ text }) => (
-            <Text size={1.6} weight={500}>
-              {text}
+        <S.NavbarInnerContainer>
+          <S.NavbarLogoContainer>
+            <S.NavbarLogoImg src={Logo} alt="hello" />
+            <Text size={2} weight={800}>
+              weMeet
             </Text>
-          ))}
-        </S.NavbarContentContainer>
-        <S.NavbarLoginWrapper>
-          <Text size={1.6} weight={300} style={{ color: theme.white }}>
-            로그인
-          </Text>
-        </S.NavbarLoginWrapper>
+          </S.NavbarLogoContainer>
+          <S.NavbarContentContainer>
+            {NAVBAR_CONTENT_LIST.map(({ text }, i) => (
+              <Text size={1.1} weight={500} key={i}>
+                {text}
+              </Text>
+            ))}
+          </S.NavbarContentContainer>
+          <S.NavbarLoginWrapper>
+            <S.NavbarLoginInnerWrapper>
+              <Text size={1.2} weight={500} style={{ color: theme.white }}>
+                로그인
+              </Text>
+            </S.NavbarLoginInnerWrapper>
+          </S.NavbarLoginWrapper>
+        </S.NavbarInnerContainer>
       </S.NavbarContainer>
     </>
   );
