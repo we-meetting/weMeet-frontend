@@ -69,14 +69,15 @@ export const SearchSubjectContainer = styled.div`
   cursor: pointer;
 `;
 
-export const SearchSubjectWrapper = styled.div`
+export const SearchSubjectWrapper = styled.div<{ isSelected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   padding-bottom: 0.4rem;
-  border-bottom: 2px solid transparent;
+  border-bottom: 2px solid
+    ${({ theme, isSelected }) => (isSelected ? theme.default : 'transparent')};
   &:hover {
-    border-bottom: 2px solid ${({ theme }) => theme.tertiary};
+    border-bottom: 2px solid ${({ theme }) => theme.default};
   }
 `;
 

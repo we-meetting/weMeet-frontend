@@ -11,8 +11,14 @@ export const Searchbar: React.FC = () => {
   const { open } = useModal();
 
   const [searchSubject, setSearchSubject] = useState<string>('전체 검색');
+  const [selectedCategory, setSelectedCategory] = useState(SEARCHBAR_CONTENT_LIST.map(() => false));
 
-  const onChangeSearchSubject = (textValue: string) => {
+  const onPressCategory = (index: number) => {
+    setSelectedCategory((prev) => prev.map((_, i) => (i === index ? true : false)));
+  };
+
+  const onChangeSearchSubject = (textValue: string, index: number) => {
+    onPressCategory(index);
     setSearchSubject(textValue);
   };
 
@@ -50,11 +56,15 @@ export const Searchbar: React.FC = () => {
           </Text>
         </S.SearchTitleWrapper>
         <S.SearchSubjectContainer>
-          {SEARCHBAR_CONTENT_LIST.map(({ text, image }) => (
-            <S.SearchSubjectWrapper onClick={() => onChangeSearchSubject(text)} key={text}>
+          {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
+            <S.SearchSubjectWrapper
+              onClick={() => onChangeSearchSubject(text, i)}
+              key={text}
+              isSelected={selectedCategory[i]}
+            >
               <S.SearchSubjectIcon src={image} alt="아이콘" />
               <Text size={1.1} weight={600}>
-                {text}
+                {text}{' '}
               </Text>
             </S.SearchSubjectWrapper>
           ))}
