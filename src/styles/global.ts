@@ -33,4 +33,17 @@ export const globalStyle = css`
     font-style: normal;
     letter-spacing: -0.03em;
   }
+
+  @media screen and (max-width: 767px) {
+    html {
+      font-size: 9px;
+    }
+    br.mobile-only {
+      display: block;
+    }
+
+    br.desktop-only {
+      display: none;
+    }
+  }
 `;
