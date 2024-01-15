@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Global, Theme, ThemeProvider, css } from '@emotion/react';
+import { Global, Theme, ThemeProvider } from '@emotion/react';
 
 import { lightTheme, globalStyle } from './styles';
 import { ModalProvider } from './providers';

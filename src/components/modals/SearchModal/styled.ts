@@ -4,7 +4,7 @@ export const SearchModalContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #8c7b6e;
+  border: 1px solid ${({ theme }) => theme.tertiary};
   border-radius: 5rem;
   padding: 0.2rem 0.6rem;
   column-gap: 0.4rem;

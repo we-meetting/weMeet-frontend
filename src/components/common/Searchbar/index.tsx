@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useTheme } from '@emotion/react';
 
 import { SearchIcon } from 'src/assets';
 import { Text } from 'src/components/common/Text';
 import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
-import { SearchModal } from 'src/components/modals';
-import { useModalStore } from 'src/stores';
-import { DefaultModalLayouts } from 'src/components/modals/DefaultModal';
 import { useModal } from 'src/providers';
 
 import * as S from './styled';
 
 export const Searchbar: React.FC = () => {
   const { open } = useModal();
-  const theme = useTheme();
 
   const [searchSubject, setSearchSubject] = useState<string>('전체 검색');
 
@@ -22,7 +18,7 @@ export const Searchbar: React.FC = () => {
     setSearchSubject(textValue);
   };
 
-  const { modalState, switchModalOpen } = useModalStore();
+  // const { modalState, switchModalOpen } = useModalStore();
 
   let dynamicPlaceholder = '';
   let dynamicTitle = '';
@@ -53,7 +49,7 @@ export const Searchbar: React.FC = () => {
     <>
       <S.SearchContentsContainer>
         <S.SearchTitleWrapper>
-          <Text size={5.2} weight={700}>
+          <Text size={2.8} weight={800}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
@@ -61,7 +57,7 @@ export const Searchbar: React.FC = () => {
           {SEARCHBAR_CONTENT_LIST.map(({ text, image }) => (
             <S.SearchSubjectWrapper onClick={() => onChangeSearchSubject(text)} key={text}>
               <S.SearchSubjectIcon src={image} alt="아이콘" />
-              <Text size={1.6} weight={600}>
+              <Text size={1.4} weight={600}>
                 {text}
               </Text>
             </S.SearchSubjectWrapper>
@@ -73,14 +69,16 @@ export const Searchbar: React.FC = () => {
             // () => switchModalOpen('searchActive')
           }
         >
-          <S.SearchbarIcon src={SearchIcon} />
-          <S.SearchbarInputWrapper>
-            <Text size={1.4} weight={300} style={{ color: theme.secondary }}>
-              {dynamicPlaceholder}
-            </Text>
-          </S.SearchbarInputWrapper>
+          <S.SearchbarInputContainer>
+            <S.SearchbarIcon src={SearchIcon} />
+            <S.SearchbarInputWrapper>
+              <Text size={1.1} weight={400} style={{ color: `rgb(133, 133, 133) ` }}>
+                {dynamicPlaceholder}
+              </Text>
+            </S.SearchbarInputWrapper>
+          </S.SearchbarInputContainer>
           <S.SearchbarButton>
-            <Text size={1.2} weight={300}>
+            <Text size={1.1} weight={400}>
               검색
             </Text>
           </S.SearchbarButton>
