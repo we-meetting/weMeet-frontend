@@ -14,8 +14,9 @@ export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
   display: flex;
   flex-direction: column;
   width: 50rem;
+  z-index: 9999;
+  background-color: ${({ theme }) => theme.white};
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
-  border: 2px solid ${({ theme }) => theme.softWhite};
   transition: border-radius 150ms;
   @media screen and (max-width: 767px) {
     width: 476px;
@@ -23,7 +24,7 @@ export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
   @media screen and (max-width: 500px) {
     width: 80%;
   }
-  ${({ searchBarModalOpen }) =>
+  ${({ searchBarModalOpen, theme }) =>
     searchBarModalOpen
       ? css`
           padding: 1rem;
@@ -35,6 +36,7 @@ export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
           border-radius: 5rem;
           padding: 0.4rem;
           padding-left: 1rem;
+          border: 2px solid ${theme.softWhite};
         `}
 `;
 

@@ -4,7 +4,7 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { AnimatePresence } from 'framer-motion';
 
 import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
-import { Text } from 'src/components/';
+import { Modal, Text } from 'src/components/';
 
 import * as S from './styled';
 
@@ -16,10 +16,14 @@ export const SearchbarSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState(
     SEARCHBAR_CONTENT_LIST.map((_, i) => (i === 0 ? true : false)),
   );
-  const [searchBarModalOpen, setSearchBarModalOpen] = useState<boolean>(false);
+  const [isSearchbarModalOpen, setIsSearchbarModalOpen] = useState<boolean>(false);
 
-  const handleSearchbarModal = () => {
-    setSearchBarModalOpen(!searchBarModalOpen);
+  const searchbarModalOpen = () => {
+    setIsSearchbarModalOpen(true);
+  };
+
+  const searchbarModalClose = () => {
+    setIsSearchbarModalOpen(false);
   };
 
   const onPressCategory = (index: number) => {
@@ -54,10 +58,10 @@ export const SearchbarSection: React.FC = () => {
     if (!searchBarRecommandRef.current || !searchInputRef.current) return;
 
     const { scrollHeight } = searchBarRecommandRef.current;
-    searchBarRecommandRef.current.style.height = searchBarModalOpen ? `${scrollHeight}px` : '0';
+    searchBarRecommandRef.current.style.height = isSearchbarModalOpen ? `${scrollHeight}px` : '0';
 
-    searchBarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
-  }, [searchBarModalOpen]);
+    isSearchbarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
+  }, [isSearchbarModalOpen]);
 
   return (
     <>
@@ -81,17 +85,20 @@ export const SearchbarSection: React.FC = () => {
             </S.SearchSubjectWrapper>
           ))}
         </S.SearchSubjectContainer>
+        {isSearchbarModalOpen && (
+          <Modal.Overlay type="searchbar" onCloseClick={searchbarModalClose} />
+        )}
         <S.SearchbarContainer
-          onClick={handleSearchbarModal}
-          searchBarModalOpen={searchBarModalOpen}
+          onClick={searchbarModalOpen}
+          searchBarModalOpen={isSearchbarModalOpen}
         >
-          <S.SearchbarInnerContainer searchBarModalOpen={searchBarModalOpen}>
+          <S.SearchbarInnerContainer searchBarModalOpen={isSearchbarModalOpen}>
             <S.SearchbarInputContainer>
               <IoSearchOutline size={'1.6rem'} />
               <S.SearchbarInput placeholder={dynamicPlaceholder} ref={searchInputRef} />
             </S.SearchbarInputContainer>
             <AnimatePresence>
-              {!searchBarModalOpen && (
+              {!isSearchbarModalOpen && (
                 <S.SearchbarButton
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

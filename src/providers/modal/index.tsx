@@ -31,7 +31,11 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   return (
     <ModalContext.Provider value={{ open, close, closeAll }}>
-      {modals.length > 0 && <Modal {...modals[0]} />}
+      {modals.length > 0 && (
+        <Modal.Overlay>
+          <Modal {...modals[0]} />
+        </Modal.Overlay>
+      )}
       {children}
     </ModalContext.Provider>
   );
