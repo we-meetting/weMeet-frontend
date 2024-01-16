@@ -8,4 +8,6 @@ export const lightTheme: Theme = {
   primary: '#CC8561',
   secondary: '#344960',
   tertiary: '#8C7B6E',
+  placeholder: 'rgb(133, 133, 133) ',
+  softWhite: '#e0e0e0',
 };
