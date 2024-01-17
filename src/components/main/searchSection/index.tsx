@@ -103,17 +103,13 @@ const SearchInput: React.FC = () => {
   );
 };
 
-export const SearchBarSection: React.FC = () => {
+const SearchBarRecommendContainer: React.FC = () => {
   const theme = useTheme();
 
-  const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
+  const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
+  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
 
   const getSearchHistory = useSearchBarStore.history((store) => store.getSearchHistory);
-  const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
-
-  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
-  const openModal = useSearchBarStore.modal((store) => store.openModal);
-  const closeModal = useSearchBarStore.modal((store) => store.closeModal);
 
   const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
 
@@ -125,9 +121,43 @@ export const SearchBarSection: React.FC = () => {
   }, [isModalOpen]);
 
   useEffect(() => {
-    console.log('getSearchHistory');
     getSearchHistory();
   }, []);
+
+  return (
+    <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
+      <PlaceCard main="주변" isLast />
+      <S.SearchRecommendTextWrapper>
+        <Text size={0.8} weight={600}>
+          최근 본 항목
+        </Text>
+      </S.SearchRecommendTextWrapper>
+      {searchHistory.length > 0 ? (
+        <>
+          {searchHistory
+            .slice(-5)
+            .reverse()
+            .map((history, i) => (
+              <PlaceCard main={history} key={i} isLast={i === 4} />
+            ))}
+        </>
+      ) : (
+        <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
+          <Text size={0.8} style={{ color: theme.placeholder }}>
+            최근 본 항목이 없습니다.
+          </Text>
+        </S.SearchRecommendTextWrapper>
+      )}
+    </S.SearchBarRecommendContainer>
+  );
+};
+
+export const SearchBarSection: React.FC = () => {
+  const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
+
+  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
+  const openModal = useSearchBarStore.modal((store) => store.openModal);
+  const closeModal = useSearchBarStore.modal((store) => store.closeModal);
 
   return (
     <>
@@ -141,30 +171,7 @@ export const SearchBarSection: React.FC = () => {
         {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
         <S.SearchBarContainer onClick={openModal} searchBarModalOpen={isModalOpen}>
           <SearchInput />
-          <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
-            <PlaceCard main="주변" isLast />
-            <S.SearchRecommendTextWrapper>
-              <Text size={0.8} weight={600}>
-                최근 본 항목
-              </Text>
-            </S.SearchRecommendTextWrapper>
-            {searchHistory.length > 0 ? (
-              <>
-                {searchHistory
-                  .slice(-5)
-                  .reverse()
-                  .map((history, i) => (
-                    <PlaceCard main={history} key={i} isLast={i === 4} />
-                  ))}
-              </>
-            ) : (
-              <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
-                <Text size={0.8} style={{ color: theme.placeholder }}>
-                  최근 본 항목이 없습니다.
-                </Text>
-              </S.SearchRecommendTextWrapper>
-            )}
-          </S.SearchBarRecommendContainer>
+          <SearchBarRecommendContainer />
         </S.SearchBarContainer>
       </S.SearchContentsContainer>
     </>

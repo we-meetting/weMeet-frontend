@@ -55,6 +55,17 @@ export const useSearchHistoryStore = create<SearchHistoryState>((set) => ({
         ...new Set([searchHistory, ...(useSearchHistoryStore.getState().searchHistory ?? [])]),
       ]),
     );
+    localStorage.setItem(
+      'searchHistory',
+      JSON.stringify(
+        useSearchHistoryStore
+          .getState()
+          .searchHistory.slice(
+            useSearchHistoryStore.getState().searchHistory.length - 5,
+            useSearchHistoryStore.getState().searchHistory.length,
+          ),
+      ),
+    );
   },
   getSearchHistory: () => {
     const history = localStorage.getItem('searchHistory');
