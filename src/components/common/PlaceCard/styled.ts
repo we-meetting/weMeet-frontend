@@ -10,7 +10,6 @@ export const PlaceCardContainer = styled.div`
       visibility: hidden;
     }
     background-color: ${({ theme }) => theme.softWhite};
-    border-bottom: none;
     z-index: 999;
   }
 `;
@@ -24,6 +23,8 @@ export const PlaceCardInnerContainer = styled.div`
 `;
 
 export const PlaceCardLine = styled.hr`
+  display: block;
+  border: none;
   background-color: ${({ theme }) => theme.softWhite};
   height: 1px;
   margin: 0 1.8rem;

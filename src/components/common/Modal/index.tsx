@@ -22,7 +22,7 @@ const ModalComponent: React.FC<ModalProps> = ({ children }) => {
 };
 
 export interface ModalOverlayProps {
-  type?: 'default' | 'searchbar';
+  type?: 'default' | 'searchBar';
   children?: React.ReactNode;
   onCloseClick?: () => void;
 }
@@ -35,7 +35,7 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({
   const { closeAll } = useModal();
 
   useEffect(() => {
-    if (type === 'searchbar') return;
+    if (type === 'searchBar') return;
     document.body.style.overflow = 'hidden';
 
     return () => {
@@ -50,7 +50,7 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <S.ModalCloseContainer onClick={type === 'searchbar' ? onCloseClick : closeAll} />
+      <S.ModalCloseContainer onClick={type === 'searchBar' ? onCloseClick : closeAll} />
       {children}
     </S.ModalOverlay>
   );

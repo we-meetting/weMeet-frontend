@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
-import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
-import { useSearchStore } from 'src/stores';
+import { useSearchBarStore } from 'src/stores';
 
 import * as S from './styled';
 
 const SearchSubjectContainer: React.FC = () => {
-  const setSearchSubject = useSearchStore((store) => store.setSubject);
+  const setSearchSubject = useSearchBarStore.subject((store) => store.setSubject);
 
   const [selectedCategory, setSelectedCategory] = useState(
     SEARCHBAR_CONTENT_LIST.map((_, i) => (i === 0 ? true : false)),
@@ -44,18 +44,12 @@ const SearchSubjectContainer: React.FC = () => {
   );
 };
 
-export interface SearchInputProps {
-  isSearchBarModalOpen: boolean;
-}
+const SearchInput: React.FC = () => {
+  const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
 
-export interface SearchFormValue {
-  keyword: string;
-}
+  const setSearchHistory = useSearchBarStore.history((store) => store.setSearchHistory);
 
-const SearchInput: React.FC<SearchInputProps> = ({ isSearchBarModalOpen }) => {
-  const { handleSubmit } = useForm<SearchFormValue>();
-
-  const dynamicPlaceholder = useSearchStore((store) => store.dynamicPlaceholder);
+  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -65,31 +59,35 @@ const SearchInput: React.FC<SearchInputProps> = ({ isSearchBarModalOpen }) => {
     setSearchText(e.target.value);
   };
 
-  const onSearchSubmit = ({ keyword }: SearchFormValue) => {
-    localStorage.setItem('searchText', keyword);
+  const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearchHistory(e.currentTarget['keyword'].value as string);
+    setSearchText('');
+    if (!searchInputRef.current) return;
+    searchInputRef.current.focus();
   };
 
   useEffect(() => {
     if (!searchInputRef.current) return;
 
-    isSearchBarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
-  }, [isSearchBarModalOpen]);
+    isModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
+  }, [isModalOpen]);
 
   return (
-    <S.SearchBarInnerContainer searchBarModalOpen={isSearchBarModalOpen}>
-      <S.SearchbarInputContainer>
+    <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen}>
+      <S.SearchBarInputContainer onSubmit={onSearchSubmit}>
         <IoSearchOutline size={'1.6rem'} />
-        <S.SearchbarInput
+        <S.SearchBarInput
           placeholder={dynamicPlaceholder}
           ref={searchInputRef}
           onChange={onChangeSearchText}
           value={searchText}
-          onSubmit={handleSubmit(onSearchSubmit)}
+          name="keyword"
         />
-      </S.SearchbarInputContainer>
+      </S.SearchBarInputContainer>
       <AnimatePresence>
-        {!isSearchBarModalOpen && (
-          <S.SearchbarButton
+        {!isModalOpen && (
+          <S.SearchBarButton
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -98,7 +96,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ isSearchBarModalOpen }) => {
             <Text size={1.1} weight={400}>
               검색
             </Text>
-          </S.SearchbarButton>
+          </S.SearchBarButton>
         )}
       </AnimatePresence>
     </S.SearchBarInnerContainer>
@@ -106,26 +104,30 @@ const SearchInput: React.FC<SearchInputProps> = ({ isSearchBarModalOpen }) => {
 };
 
 export const SearchBarSection: React.FC = () => {
-  const dynamicTitle = useSearchStore((store) => store.dynamicTitle);
+  const theme = useTheme();
+
+  const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
+
+  const getSearchHistory = useSearchBarStore.history((store) => store.getSearchHistory);
+  const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
+
+  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
+  const openModal = useSearchBarStore.modal((store) => store.openModal);
+  const closeModal = useSearchBarStore.modal((store) => store.closeModal);
 
   const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
-
-  const [isSearchBarModalOpen, setIsSearchBarModalOpen] = useState<boolean>(false);
-
-  const searchBarModalOpen = () => {
-    setIsSearchBarModalOpen(true);
-  };
-
-  const searchBarModalClose = () => {
-    setIsSearchBarModalOpen(false);
-  };
 
   useEffect(() => {
     if (!searchBarRecommendRef.current) return;
 
     const { scrollHeight } = searchBarRecommendRef.current;
-    searchBarRecommendRef.current.style.height = isSearchBarModalOpen ? `${scrollHeight}px` : '0';
-  }, [isSearchBarModalOpen]);
+    searchBarRecommendRef.current.style.height = isModalOpen ? `${scrollHeight}px` : '0';
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    console.log('getSearchHistory');
+    getSearchHistory();
+  }, []);
 
   return (
     <>
@@ -136,22 +138,33 @@ export const SearchBarSection: React.FC = () => {
           </Text>
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
-        {isSearchBarModalOpen && (
-          <Modal.Overlay type="searchbar" onCloseClick={searchBarModalClose} />
-        )}
-        <S.SearchBarContainer
-          onClick={searchBarModalOpen}
-          searchBarModalOpen={isSearchBarModalOpen}
-        >
-          <SearchInput isSearchBarModalOpen={isSearchBarModalOpen} />
-          <S.SearchbarRecommendContainer ref={searchBarRecommendRef}>
+        {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
+        <S.SearchBarContainer onClick={openModal} searchBarModalOpen={isModalOpen}>
+          <SearchInput />
+          <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
             <PlaceCard main="주변" isLast />
             <S.SearchRecommendTextWrapper>
               <Text size={0.8} weight={600}>
                 최근 본 항목
               </Text>
             </S.SearchRecommendTextWrapper>
-          </S.SearchbarRecommendContainer>
+            {searchHistory.length > 0 ? (
+              <>
+                {searchHistory
+                  .slice(-5)
+                  .reverse()
+                  .map((history, i) => (
+                    <PlaceCard main={history} key={i} isLast={i === 4} />
+                  ))}
+              </>
+            ) : (
+              <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
+                <Text size={0.8} style={{ color: theme.placeholder }}>
+                  최근 본 항목이 없습니다.
+                </Text>
+              </S.SearchRecommendTextWrapper>
+            )}
+          </S.SearchBarRecommendContainer>
         </S.SearchBarContainer>
       </S.SearchContentsContainer>
     </>

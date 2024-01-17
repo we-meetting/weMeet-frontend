@@ -46,11 +46,12 @@ export const SearchBarInnerContainer = styled.div<{ searchBarModalOpen: boolean 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 2.72rem;
+  min-height: 2.8rem;
   ${({ searchBarModalOpen, theme }) =>
     searchBarModalOpen
       ? css`
           width: 96%;
+          min-height: 3.4rem;
           border-bottom: 1px solid ${theme.default};
         `
       : css`
@@ -59,7 +60,7 @@ export const SearchBarInnerContainer = styled.div<{ searchBarModalOpen: boolean 
         `}
 `;
 
-export const SearchbarRecommendContainer = styled.div`
+export const SearchBarRecommendContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -67,7 +68,7 @@ export const SearchbarRecommendContainer = styled.div`
   transition: height 150ms;
 `;
 
-export const SearchbarInputContainer = styled.form`
+export const SearchBarInputContainer = styled.form`
   flex: max-content;
   display: flex;
   justify-content: flex-start;
@@ -75,7 +76,7 @@ export const SearchbarInputContainer = styled.form`
   column-gap: 0.4rem;
 `;
 
-export const SearchbarInput = styled.input`
+export const SearchBarInput = styled.input`
   width: 100%;
   display: block;
   white-space: nowrap;
@@ -90,12 +91,7 @@ export const SearchbarInput = styled.input`
   }
 `;
 
-export const SearchbarIcon = styled.img`
-  width: 2rem;
-  height: 2rem;
-`;
-
-export const SearchbarButton = styled(motion.div)`
+export const SearchBarButton = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
