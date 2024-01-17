@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
 
-import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
+import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
-import { SearchSubject, useSearchStore } from 'src/stores';
+import { useSearchStore } from 'src/stores';
 
 import * as S from './styled';
 
-const SearchSubjectContainer = () => {
+const SearchSubjectContainer: React.FC = () => {
   const setSearchSubject = useSearchStore((store) => store.setSubject);
 
   const [selectedCategory, setSelectedCategory] = useState(
@@ -21,7 +21,7 @@ const SearchSubjectContainer = () => {
     setSelectedCategory((prev) => prev.map((_, i) => (i === index ? true : false)));
   };
 
-  const onChangeSearchSubject = (textValue: SearchSubject, index: number) => {
+  const onChangeSearchSubject = (textValue: SearchBarContentItem['text'], index: number) => {
     onPressCategory(index);
     setSearchSubject(textValue);
   };
@@ -44,77 +44,88 @@ const SearchSubjectContainer = () => {
   );
 };
 
-const SearchInput = () => {
-  return (
-    <S.SearchbarInputContainer>
-      <IoSearchOutline size={'1.6rem'} />
-      <S.SearchbarInput
-        placeholder={dynamicPlaceholder}
-        ref={searchInputRef}
-        onChange={onChangeSearchText}
-        value={searchText}
-      />
-    </S.SearchbarInputContainer>
-  );
-};
+export interface SearchInputProps {
+  isSearchBarModalOpen: boolean;
+}
 
 export interface SearchFormValue {
   keyword: string;
 }
 
-export const SearchbarSection: React.FC = () => {
+const SearchInput: React.FC<SearchInputProps> = ({ isSearchBarModalOpen }) => {
   const { handleSubmit } = useForm<SearchFormValue>();
 
-  const searchSubject = useSearchStore((store) => store.subject);
+  const dynamicPlaceholder = useSearchStore((store) => store.dynamicPlaceholder);
 
-  const searchBarRecommandRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [isSearchbarModalOpen, setIsSearchbarModalOpen] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
-  const [searchItems, setSearchItems] = useState<string[]>([]);
-
-  const searchbarModalOpen = () => {
-    setIsSearchbarModalOpen(true);
-  };
-
-  const searchbarModalClose = () => {
-    setIsSearchbarModalOpen(false);
-  };
 
   const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
-  const onSubmitSearchText = ({ keyword }: SearchFormValue) => {};
-
-  let dynamicPlaceholder = '';
-  let dynamicTitle = '';
-  switch (searchSubject) {
-    case SearchSubject.All:
-      dynamicPlaceholder = '음식점, 즐길 거리, 동네 등 ';
-      dynamicTitle = '어디로 가시나요?';
-      break;
-    case SearchSubject.Restaurants:
-      dynamicPlaceholder = '음식점, 카페';
-      dynamicTitle = '음식점 찾기';
-      break;
-    case SearchSubject.Attractions:
-      dynamicPlaceholder = '관광 명소, 놀이공원';
-      dynamicTitle = '재밌는 체험 하기';
-      break;
-    default:
-      dynamicPlaceholder = 'Search';
-  }
+  const onSearchSubmit = ({ keyword }: SearchFormValue) => {
+    localStorage.setItem('searchText', keyword);
+  };
 
   useEffect(() => {
-    if (!searchBarRecommandRef.current || !searchInputRef.current) return;
+    if (!searchInputRef.current) return;
 
-    const { scrollHeight } = searchBarRecommandRef.current;
-    searchBarRecommandRef.current.style.height = isSearchbarModalOpen ? `${scrollHeight}px` : '0';
+    isSearchBarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
+  }, [isSearchBarModalOpen]);
 
-    isSearchbarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
-  }, [isSearchbarModalOpen]);
+  return (
+    <S.SearchBarInnerContainer searchBarModalOpen={isSearchBarModalOpen}>
+      <S.SearchbarInputContainer>
+        <IoSearchOutline size={'1.6rem'} />
+        <S.SearchbarInput
+          placeholder={dynamicPlaceholder}
+          ref={searchInputRef}
+          onChange={onChangeSearchText}
+          value={searchText}
+          onSubmit={handleSubmit(onSearchSubmit)}
+        />
+      </S.SearchbarInputContainer>
+      <AnimatePresence>
+        {!isSearchBarModalOpen && (
+          <S.SearchbarButton
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <Text size={1.1} weight={400}>
+              검색
+            </Text>
+          </S.SearchbarButton>
+        )}
+      </AnimatePresence>
+    </S.SearchBarInnerContainer>
+  );
+};
+
+export const SearchBarSection: React.FC = () => {
+  const dynamicTitle = useSearchStore((store) => store.dynamicTitle);
+
+  const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
+
+  const [isSearchBarModalOpen, setIsSearchBarModalOpen] = useState<boolean>(false);
+
+  const searchBarModalOpen = () => {
+    setIsSearchBarModalOpen(true);
+  };
+
+  const searchBarModalClose = () => {
+    setIsSearchBarModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (!searchBarRecommendRef.current) return;
+
+    const { scrollHeight } = searchBarRecommendRef.current;
+    searchBarRecommendRef.current.style.height = isSearchBarModalOpen ? `${scrollHeight}px` : '0';
+  }, [isSearchBarModalOpen]);
 
   return (
     <>
@@ -125,47 +136,23 @@ export const SearchbarSection: React.FC = () => {
           </Text>
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
-        {isSearchbarModalOpen && (
-          <Modal.Overlay type="searchbar" onCloseClick={searchbarModalClose} />
+        {isSearchBarModalOpen && (
+          <Modal.Overlay type="searchbar" onCloseClick={searchBarModalClose} />
         )}
-        <S.SearchbarContainer
-          onClick={searchbarModalOpen}
-          searchBarModalOpen={isSearchbarModalOpen}
+        <S.SearchBarContainer
+          onClick={searchBarModalOpen}
+          searchBarModalOpen={isSearchBarModalOpen}
         >
-          <S.SearchbarInnerContainer searchBarModalOpen={isSearchbarModalOpen}>
-            <S.SearchbarInputContainer>
-              <IoSearchOutline size={'1.6rem'} />
-              <S.SearchbarInput
-                placeholder={dynamicPlaceholder}
-                ref={searchInputRef}
-                onChange={onChangeSearchText}
-                value={searchText}
-              />
-            </S.SearchbarInputContainer>
-            <AnimatePresence>
-              {!isSearchbarModalOpen && (
-                <S.SearchbarButton
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <Text size={1.1} weight={400}>
-                    검색
-                  </Text>
-                </S.SearchbarButton>
-              )}
-            </AnimatePresence>
-          </S.SearchbarInnerContainer>
-          <S.SearchbarRecommandContainer ref={searchBarRecommandRef}>
+          <SearchInput isSearchBarModalOpen={isSearchBarModalOpen} />
+          <S.SearchbarRecommendContainer ref={searchBarRecommendRef}>
             <PlaceCard main="주변" isLast />
-            <S.SearchRecommandTextWrapper>
+            <S.SearchRecommendTextWrapper>
               <Text size={0.8} weight={600}>
                 최근 본 항목
               </Text>
-            </S.SearchRecommandTextWrapper>
-          </S.SearchbarRecommandContainer>
-        </S.SearchbarContainer>
+            </S.SearchRecommendTextWrapper>
+          </S.SearchbarRecommendContainer>
+        </S.SearchBarContainer>
       </S.SearchContentsContainer>
     </>
   );

@@ -12,7 +12,7 @@ export const SearchContentsContainer = styled.div`
   align-items: center;
 `;
 
-export const SearchbarContainer = styled(ShadowBox)<{ searchBarModalOpen: boolean }>`
+export const SearchBarContainer = styled(ShadowBox)<{ searchBarModalOpen: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,7 +42,7 @@ export const SearchbarContainer = styled(ShadowBox)<{ searchBarModalOpen: boolea
         `}
 `;
 
-export const SearchbarInnerContainer = styled.div<{ searchBarModalOpen: boolean }>`
+export const SearchBarInnerContainer = styled.div<{ searchBarModalOpen: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -59,7 +59,7 @@ export const SearchbarInnerContainer = styled.div<{ searchBarModalOpen: boolean 
         `}
 `;
 
-export const SearchbarRecommandContainer = styled.div`
+export const SearchbarRecommendContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -145,6 +145,6 @@ export const SearchTitleWrapper = styled.div`
   margin-bottom: 3rem;
 `;
 
-export const SearchRecommandTextWrapper = styled.div`
+export const SearchRecommendTextWrapper = styled.div`
   padding: 1rem 1.8rem;
 `;

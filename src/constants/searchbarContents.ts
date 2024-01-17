@@ -1,13 +1,12 @@
 import { allSearchIcon, restaurantSearchIcon, enjoySearchIcon } from 'src/assets';
-import { SearchSubject } from 'src/stores';
 
 export interface SearchBarContentItem {
-  text: SearchSubject;
+  text: '전체 검색' | '맛집 검색' | '즐길 거리';
   image: string;
 }
 
 export const SEARCHBAR_CONTENT_LIST: SearchBarContentItem[] = [
-  { text: SearchSubject.All, image: allSearchIcon },
-  { text: SearchSubject.Restaurants, image: restaurantSearchIcon },
-  { text: SearchSubject.Attractions, image: enjoySearchIcon },
+  { text: '전체 검색', image: allSearchIcon },
+  { text: '맛집 검색', image: restaurantSearchIcon },
+  { text: '즐길 거리', image: enjoySearchIcon },
 ];
