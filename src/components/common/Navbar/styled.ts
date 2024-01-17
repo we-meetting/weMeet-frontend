@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 
-export const NavbarContainer = styled.div`
+export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   width: 100%;
   position: fixed;
   top: 0;
-  height: 6rem;
+  padding: 0.6rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.white};
+  transition: border-bottom 150ms;
+  border-bottom: ${({ isScroll, theme }) => (isScroll ? `1px solid ${theme.softWhite}` : 'none')};
 `;
 
 export const NavbarInnerContainer = styled.div`
@@ -33,12 +36,12 @@ export const NavbarLogoContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  column-gap: 1rem;
+  column-gap: 0.4rem;
 `;
 
 export const NavbarLogoImg = styled.img`
-  width: 3.4rem;
-  height: 3.4rem;
+  width: 2.4rem;
+  height: 2.4rem;
 `;
 
 export const NavbarContentContainer = styled.div`

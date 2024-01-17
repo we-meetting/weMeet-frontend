@@ -1,7 +1,7 @@
 import { allSearchIcon, restaurantSearchIcon, enjoySearchIcon } from 'src/assets';
 
 export interface SearchBarContentItem {
-  text: string;
+  text: '전체 검색' | '맛집 검색' | '즐길 거리';
   image: string;
 }
 

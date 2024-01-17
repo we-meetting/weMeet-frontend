@@ -9,5 +9,7 @@ declare module '@emotion/react' {
     primary: string;
     secondary: string;
     tertiary: string;
+    placeholder: string;
+    softWhite: string;
   }
 }
