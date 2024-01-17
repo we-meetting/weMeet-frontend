@@ -2,6 +2,8 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
+import { ShadowBox } from 'src/components/common';
+
 export const SearchContentsContainer = styled.div`
   width: 100%;
   display: flex;
@@ -10,13 +12,13 @@ export const SearchContentsContainer = styled.div`
   align-items: center;
 `;
 
-export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
+export const SearchbarContainer = styled(ShadowBox)<{ searchBarModalOpen: boolean }>`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 50rem;
-  z-index: 9999;
-  background-color: ${({ theme }) => theme.white};
-  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
+  z-index: ${({ searchBarModalOpen }) => (searchBarModalOpen ? 999 : 1)};
   transition: border-radius 150ms;
   @media screen and (max-width: 767px) {
     width: 476px;
@@ -24,19 +26,19 @@ export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
   @media screen and (max-width: 500px) {
     width: 80%;
   }
-  ${({ searchBarModalOpen, theme }) =>
+  ${({ searchBarModalOpen }) =>
     searchBarModalOpen
       ? css`
-          padding: 1rem;
+          padding: 1rem 0.4rem;
           padding-top: 0.4rem;
           row-gap: 1rem;
           border-radius: 1rem;
+          border: none;
         `
       : css`
           border-radius: 5rem;
           padding: 0.4rem;
           padding-left: 1rem;
-          border: 2px solid ${theme.softWhite};
         `}
 `;
 
@@ -45,18 +47,27 @@ export const SearchbarInnerContainer = styled.div<{ searchBarModalOpen: boolean 
   justify-content: space-between;
   align-items: center;
   min-height: 2.72rem;
-  border-bottom: ${({ searchBarModalOpen, theme }) =>
-    searchBarModalOpen ? `1px solid ${theme.default}` : 'none'};
+  ${({ searchBarModalOpen, theme }) =>
+    searchBarModalOpen
+      ? css`
+          width: 96%;
+          border-bottom: 1px solid ${theme.default};
+        `
+      : css`
+          width: 100%;
+          flex-direction: row;
+        `}
 `;
 
 export const SearchbarRecommandContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: height 150ms;
 `;
 
-export const SearchbarInputContainer = styled.div`
+export const SearchbarInputContainer = styled.form`
   flex: max-content;
   display: flex;
   justify-content: flex-start;
@@ -132,4 +143,8 @@ export const SearchTitleWrapper = styled.div`
   align-items: center;
   margin-top: 1rem;
   margin-bottom: 3rem;
+`;
+
+export const SearchRecommandTextWrapper = styled.div`
+  padding: 1rem 1.8rem;
 `;
