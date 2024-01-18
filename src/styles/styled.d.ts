@@ -11,5 +11,6 @@ declare module '@emotion/react' {
     tertiary: string;
     placeholder: string;
     softWhite: string;
+    warningRed: string;
   }
 }

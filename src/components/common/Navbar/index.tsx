@@ -4,16 +4,22 @@ import { useTheme } from '@emotion/react';
 
 import { Logo } from 'src/assets';
 import { NAVBAR_CONTENT_LIST } from 'src/constants';
+import { useModal } from 'src/providers/modal';
 
 import { Text } from '../Text';
+import { LoginModal } from '../modals/LoginModal';
 
 import * as S from './styled';
 
 export const Navbar: React.FC = () => {
   const theme = useTheme();
-
+  const { open } = useModal();
   // 스크롤 감지 될때 true로 바꾸기
   const [isScroll, setIsScroll] = useState<boolean>(false);
+
+  const onLoginModalOpen = () => {
+    open({ children: <LoginModal /> });
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -40,7 +46,7 @@ export const Navbar: React.FC = () => {
             ))}
           </S.NavbarContentContainer>
           <S.NavbarLoginWrapper>
-            <S.NavbarLoginInnerWrapper>
+            <S.NavbarLoginInnerWrapper onClick={onLoginModalOpen}>
               <Text size={1} weight={500} style={{ color: theme.white }}>
                 로그인
               </Text>

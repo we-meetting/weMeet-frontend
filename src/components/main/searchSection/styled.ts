@@ -14,7 +14,7 @@ export const SearchbarContainer = styled.div<{ searchBarModalOpen: boolean }>`
   display: flex;
   flex-direction: column;
   width: 50rem;
-  z-index: 9999;
+  z-index: ${({ searchBarModalOpen }) => (searchBarModalOpen ? 999 : 1)};
   background-color: ${({ theme }) => theme.white};
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
   transition: border-radius 150ms;

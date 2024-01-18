@@ -20,5 +20,5 @@
       "src/*": ["src/*"]
     }
   },
-  "include": ["src", "commitlint.config.js"]
+  "include": ["src", "commitlint.config.js", "src/components/common/AuthForm/index.tsx"]
 }

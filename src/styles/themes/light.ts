@@ -10,4 +10,5 @@ export const lightTheme: Theme = {
   tertiary: '#8C7B6E',
   placeholder: 'rgb(133, 133, 133) ',
   softWhite: '#e0e0e0',
+  warningRed: '#FF0000',
 };
