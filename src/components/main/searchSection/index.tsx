@@ -1,16 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 
-import { AnimatePresence, MotionProps } from 'framer-motion';
-import { useTheme } from '@emotion/react';
+import { AnimatePresence } from 'framer-motion';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
 import { useSearchBarStore } from 'src/stores';
+import { useFadeInScroll } from 'src/hooks';
 
 import * as S from './styled';
 
 const SearchSubjectContainer: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
   const setSearchSubject = useSearchBarStore.subject((store) => store.setSubject);
 
   const [selectedCategory, setSelectedCategory] = useState(
@@ -27,7 +29,7 @@ const SearchSubjectContainer: React.FC = () => {
   };
 
   return (
-    <S.SearchSubjectContainer>
+    <S.SearchSubjectContainer {...fadeInScroll({ delay: 0.2 })}>
       {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
         <S.SearchSubjectWrapper
           onClick={() => onChangeSearchSubject(text, i)}
@@ -93,7 +95,7 @@ const SearchInput: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <Text size={1.1} weight={400}>
+            <Text size={1.1} color="white">
               검색
             </Text>
           </S.SearchBarButton>
@@ -104,8 +106,6 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
-  const theme = useTheme();
-
   const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
   const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
 
@@ -143,7 +143,7 @@ const SearchBarRecommendContainer: React.FC = () => {
         </>
       ) : (
         <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
-          <Text size={0.8} style={{ color: theme.placeholder }}>
+          <Text size={0.8} color="placeholder">
             최근 본 항목이 없습니다.
           </Text>
         </S.SearchRecommendTextWrapper>
@@ -153,16 +153,7 @@ const SearchBarRecommendContainer: React.FC = () => {
 };
 
 export const SearchBarSection: React.FC = () => {
-  const fadeInScroll = useCallback(
-    ({ delay }: { delay: number }) =>
-      ({
-        initial: { opacity: 0, transform: 'translate3d(0, 50%, 0)' }, // (0,50%,0) -> x축, y축, z축 순서
-        animate: { opacity: 1, transform: 'translate3d(0, 0, 0)' },
-        transition: { ease: [0, 0, 0.2, 1], duration: 0.7, delay },
-        viewport: { once: true },
-      }) as MotionProps,
-    [],
-  );
+  const { fadeInScroll } = useFadeInScroll();
 
   const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
 
@@ -172,15 +163,19 @@ export const SearchBarSection: React.FC = () => {
 
   return (
     <>
-      <S.SearchContentsContainer {...fadeInScroll({ delay: 0.2 })}>
-        <S.SearchTitleWrapper>
+      <S.SearchContentsContainer>
+        <S.SearchTitleWrapper {...fadeInScroll({ delay: 0.2 })}>
           <Text size={2.8} weight={700}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
         {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
-        <S.SearchBarContainer onClick={openModal} searchBarModalOpen={isModalOpen}>
+        <S.SearchBarContainer
+          onClick={openModal}
+          searchBarModalOpen={isModalOpen}
+          {...fadeInScroll({ delay: 0.2 })}
+        >
           <SearchInput />
           <SearchBarRecommendContainer />
         </S.SearchBarContainer>

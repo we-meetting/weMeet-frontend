@@ -13,6 +13,7 @@ export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   background-color: ${({ theme }) => theme.white};
   transition: border-bottom 150ms;
   border-bottom: ${({ isScroll, theme }) => (isScroll ? `1px solid ${theme.softWhite}` : 'none')};
+  z-index: 96;
 `;
 
 export const NavbarInnerContainer = styled.div`

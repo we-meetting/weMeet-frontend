@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useTheme } from '@emotion/react';
-
 import { Logo } from 'src/assets';
 import { NAVBAR_CONTENT_LIST } from 'src/constants';
 
@@ -10,9 +8,6 @@ import { Text } from '../Text';
 import * as S from './styled';
 
 export const Navbar: React.FC = () => {
-  const theme = useTheme();
-
-  // 스크롤 감지 될때 true로 바꾸기
   const [isScroll, setIsScroll] = useState<boolean>(false);
 
   useEffect(() => {
@@ -41,9 +36,7 @@ export const Navbar: React.FC = () => {
           </S.NavbarContentList>
           <S.NavbarLoginWrapper>
             <S.NavbarLoginInnerWrapper>
-              <Text weight={500} style={{ color: theme.white }}>
-                로그인
-              </Text>
+              <Text color="white">로그인</Text>
             </S.NavbarLoginInnerWrapper>
           </S.NavbarLoginWrapper>
         </S.NavbarInnerContainer>

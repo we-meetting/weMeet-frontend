@@ -22,7 +22,7 @@ export type TextProps = Partial<TextCommonProps> & {
  * @param {number} size - 폰트 사이즈
  * @param {number} weight - 폰트 굵기
  */
-export const Text: React.FC<TextProps> = ({ children, size, weight = 400, style, color }) => {
+export const Text: React.FC<TextProps> = ({ children, size, weight = 500, style, color }) => {
   return (
     <S.TextElement size={size} weight={weight} style={style} color={color}>
       {children}

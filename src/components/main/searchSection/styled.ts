@@ -2,8 +2,6 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-import { ShadowBox } from 'src/components/common';
-
 export const SearchContentsContainer = styled(motion.div)`
   width: 100%;
   display: flex;
@@ -12,20 +10,27 @@ export const SearchContentsContainer = styled(motion.div)`
   align-items: center;
 `;
 
-export const SearchBarContainer = styled(ShadowBox)<{ searchBarModalOpen: boolean }>`
+export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boolean }>`
+  background-color: ${({ theme }) => theme.white};
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
+  border: 2px solid ${({ theme }) => theme.softWhite};
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   width: 50rem;
   z-index: ${({ searchBarModalOpen }) => (searchBarModalOpen ? 999 : 1)};
   transition: border-radius 150ms;
+
   @media screen and (max-width: 767px) {
     width: 476px;
   }
   @media screen and (max-width: 500px) {
     width: 80%;
   }
+
   ${({ searchBarModalOpen }) =>
     searchBarModalOpen
       ? css`
@@ -106,7 +111,7 @@ export const SearchBarButton = styled(motion.div)`
   }
 `;
 
-export const SearchSubjectContainer = styled.div`
+export const SearchSubjectContainer = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -133,7 +138,7 @@ export const SearchSubjectIcon = styled.img`
   margin-right: 0.4rem;
 `;
 
-export const SearchTitleWrapper = styled.div`
+export const SearchTitleWrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
