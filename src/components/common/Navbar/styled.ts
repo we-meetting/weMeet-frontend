@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
+import { Container } from 'src/components/layouts';
+
 export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   width: 100%;
   position: fixed;
@@ -16,22 +18,13 @@ export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   z-index: 96;
 `;
 
-export const NavbarInnerContainer = styled.div`
+export const NavbarInnerContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
-
-  width: 100%;
-  max-width: 1140px;
-  margin: 0 auto;
-  @media screen and (max-width: 991px) {
-    padding: 0 3.2rem !important;
-  }
-
-  @media screen and (max-width: 991px) {
-    padding: 0 2.4rem !important;
-  }
+  padding-top: 0;
+  padding-bottom: 0;
 `;
 
 export const NavbarLogoContainer = styled.div`

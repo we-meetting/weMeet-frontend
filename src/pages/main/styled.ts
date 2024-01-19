@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 
-export const MainPageContainer = styled.div`
-  width: 100%;
+import { Container } from 'src/components';
+
+export const MainPageContainer = styled(Container)`
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 `;
