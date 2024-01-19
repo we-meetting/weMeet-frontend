@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, MotionProps } from 'framer-motion';
 import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
@@ -153,6 +153,17 @@ const SearchBarRecommendContainer: React.FC = () => {
 };
 
 export const SearchBarSection: React.FC = () => {
+  const fadeInScroll = useCallback(
+    ({ delay }: { delay: number }) =>
+      ({
+        initial: { opacity: 0, transform: 'translate3d(0, 50%, 0)' }, // (0,50%,0) -> x축, y축, z축 순서
+        animate: { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+        transition: { ease: [0, 0, 0.2, 1], duration: 0.7, delay },
+        viewport: { once: true },
+      }) as MotionProps,
+    [],
+  );
+
   const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
 
   const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
@@ -161,7 +172,7 @@ export const SearchBarSection: React.FC = () => {
 
   return (
     <>
-      <S.SearchContentsContainer>
+      <S.SearchContentsContainer {...fadeInScroll({ delay: 0.2 })}>
         <S.SearchTitleWrapper>
           <Text size={2.8} weight={700}>
             {dynamicTitle}

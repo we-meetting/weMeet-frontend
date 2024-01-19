@@ -32,16 +32,16 @@ export const Navbar: React.FC = () => {
               weMeet
             </Text>
           </S.NavbarLogoContainer>
-          <S.NavbarContentContainer>
-            {NAVBAR_CONTENT_LIST.map(({ text }, i) => (
-              <Text size={1.1} weight={500} key={i}>
+          <S.NavbarContentList>
+            {NAVBAR_CONTENT_LIST.map(({ text, href }, i) => (
+              <S.NavbarContentItem key={i} to={href}>
                 {text}
-              </Text>
+              </S.NavbarContentItem>
             ))}
-          </S.NavbarContentContainer>
+          </S.NavbarContentList>
           <S.NavbarLoginWrapper>
             <S.NavbarLoginInnerWrapper>
-              <Text size={1} weight={500} style={{ color: theme.white }}>
+              <Text weight={500} style={{ color: theme.white }}>
                 로그인
               </Text>
             </S.NavbarLoginInnerWrapper>

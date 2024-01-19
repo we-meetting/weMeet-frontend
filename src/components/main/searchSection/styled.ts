@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 import { ShadowBox } from 'src/components/common';
 
-export const SearchContentsContainer = styled.div`
+export const SearchContentsContainer = styled(motion.div)`
   width: 100%;
   display: flex;
   flex-direction: column;

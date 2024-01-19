@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom';
+
 import styled from '@emotion/styled';
 
 export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   width: 100%;
   position: fixed;
   top: 0;
-  padding: 0.6rem 0;
+  padding: 1rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,12 +46,18 @@ export const NavbarLogoImg = styled.img`
   height: 2.4rem;
 `;
 
-export const NavbarContentContainer = styled.div`
+export const NavbarContentList = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
   column-gap: 4rem;
   cursor: pointer;
+`;
+
+export const NavbarContentItem = styled(Link)`
+  text-decoration: none;
+  font-weight: 600;
+  color: ${({ theme }) => theme.default};
 `;
 
 export const NavbarLoginWrapper = styled.div`

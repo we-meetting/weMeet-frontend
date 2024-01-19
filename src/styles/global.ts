@@ -29,7 +29,6 @@ export const globalStyle = (theme: Theme) => css`
   #app,
   #root,
   #__next {
-    font-size: 14px;
     font-family: 'Pretendard Variable';
     font-weight: 400;
     font-style: normal;
