@@ -87,8 +87,8 @@ export const SearchIcon = styled(IoSearchOutline)`
   width: 1.6rem;
   height: 1.6rem;
   @media screen and (max-width: 500px) {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
@@ -127,13 +127,13 @@ export const SearchBarButton = styled(motion.div)`
 
 export const SearchSubjectContainer = styled(motion.div)`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
   column-gap: 3rem;
   margin-bottom: 1rem;
   cursor: pointer;
   @media screen and (max-width: 500px) {
+    width: 100%;
     column-gap: 1rem;
   }
 `;
@@ -150,10 +150,14 @@ export const SearchSubjectWrapper = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-export const SearchSubjectIcon = styled.img`
-  width: 2.2rem;
-  height: 2.2rem;
+export const SearchSubjectIconWrapper = styled.div`
+  width: 2rem;
+  height: 2rem;
   margin-right: 0.4rem;
+  & > svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const SearchTitleWrapper = styled(motion.div)`

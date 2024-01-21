@@ -42,6 +42,10 @@ export const NavbarLogoContainer = styled.div`
 export const NavbarLogoImg = styled.img`
   width: 2.4rem;
   height: 2.4rem;
+  @media screen and (max-width: 500px) {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
 `;
 
 export const NavbarContentListWrapper = styled.div`

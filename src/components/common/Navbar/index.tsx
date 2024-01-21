@@ -23,7 +23,7 @@ export const Navbar: React.FC = () => {
         <S.NavbarInnerContainer>
           <S.NavbarLogoContainer>
             <S.NavbarLogoImg src={Logo} alt="hello" />
-            <Text size={1.8} weight={700}>
+            <Text size={1.8} weight={700} mobileBigText>
               weMeet
             </Text>
           </S.NavbarLogoContainer>

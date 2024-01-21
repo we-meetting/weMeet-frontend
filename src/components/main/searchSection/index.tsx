@@ -5,7 +5,7 @@ import { AnimatePresence } from 'framer-motion';
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
 import { useSearchBarStore } from 'src/stores';
-import { useFadeInScroll } from 'src/hooks';
+import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
 
 import * as S from './styled';
 
@@ -29,13 +29,13 @@ const SearchSubjectContainer: React.FC = () => {
 
   return (
     <S.SearchSubjectContainer {...fadeInScroll({ delay: 0.2 })}>
-      {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
+      {SEARCHBAR_CONTENT_LIST.map(({ text, icon }, i) => (
         <S.SearchSubjectWrapper
           onClick={() => onChangeSearchSubject(text, i)}
           key={text}
           isSelected={selectedCategory[i]}
         >
-          <S.SearchSubjectIcon src={image} alt="아이콘" />
+          <S.SearchSubjectIconWrapper>{icon}</S.SearchSubjectIconWrapper>
           <Text size={1.1} weight={600} mobileBigText>
             {text}{' '}
           </Text>
@@ -46,6 +46,8 @@ const SearchSubjectContainer: React.FC = () => {
 };
 
 const SearchInput: React.FC = () => {
+  const { windowSize } = useGetWindowSize();
+
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
 
   const setSearchHistory = useSearchBarStore.history((store) => store.setSearchHistory);
@@ -87,7 +89,7 @@ const SearchInput: React.FC = () => {
         />
       </S.SearchBarInputContainer>
       <AnimatePresence>
-        {!isModalOpen && (
+        {!isModalOpen && windowSize > 500 && (
           <S.SearchBarButton
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
