@@ -29,7 +29,7 @@ const SearchSubjectContainer: React.FC = () => {
   };
 
   return (
-    <S.SearchSubjectContainer {...fadeInScroll({ delay: 0.2 })}>
+    <S.SearchSubjectContainer {...fadeInScroll({ delay: 0 })}>
       {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
         <S.SearchSubjectWrapper
           onClick={() => onChangeSearchSubject(text, i)}
@@ -164,8 +164,8 @@ export const SearchBarSection: React.FC = () => {
   return (
     <>
       <S.SearchContentsContainer>
-        <S.SearchTitleWrapper {...fadeInScroll({ delay: 0.2 })}>
-          <Text size={2.8} weight={700}>
+        <S.SearchTitleWrapper {...fadeInScroll({ delay: 0 })}>
+          <Text size={2.6} weight={800}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
@@ -174,7 +174,7 @@ export const SearchBarSection: React.FC = () => {
         <S.SearchBarContainer
           onClick={openModal}
           searchBarModalOpen={isModalOpen}
-          {...fadeInScroll({ delay: 0.2 })}
+          {...fadeInScroll({ delay: 0 })}
         >
           <SearchInput />
           <SearchBarRecommendContainer />
