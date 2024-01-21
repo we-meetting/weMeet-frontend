@@ -119,7 +119,7 @@ const SearchBarRecommendContainer: React.FC = () => {
 
     const { scrollHeight } = searchBarRecommendRef.current;
     searchBarRecommendRef.current.style.height = isModalOpen ? `${scrollHeight}px` : '0';
-  }, [isModalOpen]);
+  }, [isModalOpen, searchHistory]);
 
   useEffect(() => {
     getSearchHistory();
@@ -139,7 +139,7 @@ const SearchBarRecommendContainer: React.FC = () => {
             .slice(-5)
             .reverse()
             .map((history, i) => (
-              <PlaceCard main={history} key={i} isLast={i === 4} />
+              <PlaceCard main={history} key={i} isLast={searchHistory.slice(-5).length - 1 === i} />
             ))}
         </>
       ) : (
