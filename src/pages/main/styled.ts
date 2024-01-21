@@ -7,4 +7,7 @@ export const MainPageContainer = styled(Container)`
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  @media screen and (max-width: 767px) {
+    padding-bottom: 4rem;
+  }
 `;

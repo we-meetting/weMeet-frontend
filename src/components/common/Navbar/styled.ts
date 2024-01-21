@@ -8,14 +8,18 @@ export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   width: 100%;
   position: fixed;
   top: 0;
-  padding: 1rem 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.white};
   transition: border-bottom 150ms;
   border-bottom: ${({ isScroll, theme }) => (isScroll ? `1px solid ${theme.softWhite}` : 'none')};
   z-index: 96;
+  padding: 1rem 0;
+  background-color: ${({ theme }) => theme.white};
+  @media screen and (max-width: 500px) {
+    padding-bottom: 0;
+  }
 `;
 
 export const NavbarInnerContainer = styled(Container)`
@@ -40,7 +44,13 @@ export const NavbarLogoImg = styled.img`
   height: 2.4rem;
 `;
 
-export const NavbarContentList = styled.ul`
+export const NavbarContentListWrapper = styled.div`
+  width: 100%;
+  padding-top: 1.6rem;
+  padding-bottom: 1rem;
+`;
+
+export const NavbarContentListStyle = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,10 +58,25 @@ export const NavbarContentList = styled.ul`
   cursor: pointer;
 `;
 
+export const NavbarContentList = styled(NavbarContentListStyle)`
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
+`;
+
+export const NavbarMobileContentList = styled(NavbarContentListStyle)`
+  @media screen and (min-width: 500px) {
+    display: none;
+  }
+`;
+
 export const NavbarContentItem = styled(Link)`
   text-decoration: none;
   font-weight: 600;
   color: ${({ theme }) => theme.default};
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const NavbarLoginWrapper = styled.div`
@@ -70,4 +95,11 @@ export const NavbarLoginInnerWrapper = styled.div`
   padding: 0.8rem 1rem;
   cursor: pointer;
   width: fit-content;
+  transition: background-color 150ms ease-in-out;
+  &:hover {
+    background-color: ${({ theme }) => theme.primaryHover};
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;

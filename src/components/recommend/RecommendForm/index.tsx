@@ -31,7 +31,7 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
           {title}
         </Text>
         {subTitle && (
-          <Text size={1.1} weight={400}>
+          <Text size={1.1} weight={400} mobileBigText>
             {subTitle}
           </Text>
         )}

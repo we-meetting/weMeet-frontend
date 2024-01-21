@@ -1,3 +1,5 @@
+import { IoSearchOutline } from 'react-icons/io5';
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
@@ -28,7 +30,7 @@ export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boole
     width: 476px;
   }
   @media screen and (max-width: 500px) {
-    width: 80%;
+    width: 100%;
   }
 
   ${({ searchBarModalOpen }) =>
@@ -81,6 +83,15 @@ export const SearchBarInputContainer = styled.form`
   column-gap: 0.4rem;
 `;
 
+export const SearchIcon = styled(IoSearchOutline)`
+  width: 1.6rem;
+  height: 1.6rem;
+  @media screen and (max-width: 500px) {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+`;
+
 export const SearchBarInput = styled.input`
   width: 100%;
   display: block;
@@ -93,6 +104,9 @@ export const SearchBarInput = styled.input`
   color: ${({ theme }) => theme.default};
   &::placeholder {
     color: ${({ theme }) => theme.placeholder};
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.3rem;
   }
 `;
 
@@ -113,11 +127,15 @@ export const SearchBarButton = styled(motion.div)`
 
 export const SearchSubjectContainer = styled(motion.div)`
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   column-gap: 3rem;
   margin-bottom: 1rem;
   cursor: pointer;
+  @media screen and (max-width: 500px) {
+    column-gap: 1rem;
+  }
 `;
 
 export const SearchSubjectWrapper = styled.div<{ isSelected: boolean }>`
@@ -148,4 +166,7 @@ export const SearchTitleWrapper = styled(motion.div)`
 
 export const SearchRecommendTextWrapper = styled.div`
   padding: 1rem 1.8rem;
+  @media screen and (max-width: 500px) {
+    padding: 1rem;
+  }
 `;

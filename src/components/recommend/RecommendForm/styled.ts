@@ -10,8 +10,9 @@ export const RecommendFormContainer = styled(Container)`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  /* padding-top: 14rem;
-  padding-bottom: 14rem; */
+  @media screen and (max-width: 767px) {
+    padding-bottom: 4rem;
+  }
 `;
 
 export const RecommendFormTitleContainer = styled(motion.div)`
@@ -30,9 +31,12 @@ export const RecommendInnerContainer = styled.div`
 export const RecommendFormButton = styled(motion.button)`
   border: none;
   border-radius: 3rem;
-  padding: 1rem 1.2rem;
+  padding: 0.8rem 1rem;
   background-color: ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.white};
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;

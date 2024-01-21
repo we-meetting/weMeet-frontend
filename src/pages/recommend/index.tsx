@@ -2,16 +2,19 @@ import React from 'react';
 
 import { RecommendForm } from 'src/components';
 import { RECOMMEND_CONTENTS_LIST } from 'src/constants';
+import { useGetWindowSize } from 'src/hooks';
 
 import * as S from './styled';
 
 export const RecommendPage: React.FC = () => {
-  console.log(RECOMMEND_CONTENTS_LIST.length);
+  const { windowSize } = useGetWindowSize();
+
+  const itemNum = windowSize > 768 ? 5 : 4;
 
   const splitRecommendContentsList = (list: string[]) => {
     const result = [];
-    for (let i = 0; i < list.length; i += 5) {
-      result.push(list.slice(i, i + 5));
+    for (let i = 0; i < list.length; i += itemNum) {
+      result.push(list.slice(i, i + itemNum));
     }
     return result;
   };

@@ -57,7 +57,7 @@ export const globalStyle = (theme: Theme) => css`
       font-size: 12px;
     }
 
-    @media screen and (max-width: 500px) and (min-width: 300px) {
+    @media screen and (max-width: 500px) {
       font-size: 12px;
     }
   }

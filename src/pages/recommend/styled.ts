@@ -27,4 +27,7 @@ export const RecommendButton = styled.button`
   font-size: 1rem;
   font-weight: 500;
   color: ${({ theme }) => theme.white};
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
