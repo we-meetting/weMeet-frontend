@@ -1,5 +1,4 @@
 import React from 'react';
-import { BiNavigation } from 'react-icons/bi';
 
 import { Text } from '../Text';
 
@@ -16,10 +15,10 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({ main, location, isLast }) 
     <S.PlaceCardContainer>
       <S.PlaceCardInnerContainer>
         <S.PlaceCardIconWrapper>
-          {location ? <BiNavigation size={'1.3rem'} /> : <BiNavigation size={'1.3rem'} />}
+          {location ? <S.PlaceCardNavigationIcon /> : <S.PlaceCardNavigationIcon />}
         </S.PlaceCardIconWrapper>
         <S.PlaceCardTextContainer>
-          <Text size={1.04} weight={600}>
+          <Text size={1.04} weight={600} mobileBigText>
             {main}
           </Text>
           {location && (

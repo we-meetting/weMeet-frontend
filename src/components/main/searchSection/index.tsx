@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IoSearchOutline } from 'react-icons/io5';
 
 import { AnimatePresence } from 'framer-motion';
-import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
 import { useSearchBarStore } from 'src/stores';
+import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
 
 import * as S from './styled';
 
 const SearchSubjectContainer: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
   const setSearchSubject = useSearchBarStore.subject((store) => store.setSubject);
 
   const [selectedCategory, setSelectedCategory] = useState(
@@ -27,15 +28,15 @@ const SearchSubjectContainer: React.FC = () => {
   };
 
   return (
-    <S.SearchSubjectContainer>
-      {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
+    <S.SearchSubjectContainer {...fadeInScroll({ delay: 0.2 })}>
+      {SEARCHBAR_CONTENT_LIST.map(({ text, icon }, i) => (
         <S.SearchSubjectWrapper
           onClick={() => onChangeSearchSubject(text, i)}
           key={text}
           isSelected={selectedCategory[i]}
         >
-          <S.SearchSubjectIcon src={image} alt="아이콘" />
-          <Text size={1.1} weight={600}>
+          <S.SearchSubjectIconWrapper>{icon}</S.SearchSubjectIconWrapper>
+          <Text size={1.1} weight={600} mobileBigText>
             {text}{' '}
           </Text>
         </S.SearchSubjectWrapper>
@@ -45,6 +46,8 @@ const SearchSubjectContainer: React.FC = () => {
 };
 
 const SearchInput: React.FC = () => {
+  const { windowSize } = useGetWindowSize();
+
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
 
   const setSearchHistory = useSearchBarStore.history((store) => store.setSearchHistory);
@@ -76,7 +79,7 @@ const SearchInput: React.FC = () => {
   return (
     <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen}>
       <S.SearchBarInputContainer onSubmit={onSearchSubmit}>
-        <IoSearchOutline size={'1.6rem'} />
+        <S.SearchIcon />
         <S.SearchBarInput
           placeholder={dynamicPlaceholder}
           ref={searchInputRef}
@@ -86,14 +89,14 @@ const SearchInput: React.FC = () => {
         />
       </S.SearchBarInputContainer>
       <AnimatePresence>
-        {!isModalOpen && (
+        {!isModalOpen && windowSize > 500 && (
           <S.SearchBarButton
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <Text size={1.1} weight={400}>
+            <Text size={1.1} color="white" mobileBigText>
               검색
             </Text>
           </S.SearchBarButton>
@@ -104,8 +107,6 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
-  const theme = useTheme();
-
   const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
   const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
 
@@ -118,7 +119,7 @@ const SearchBarRecommendContainer: React.FC = () => {
 
     const { scrollHeight } = searchBarRecommendRef.current;
     searchBarRecommendRef.current.style.height = isModalOpen ? `${scrollHeight}px` : '0';
-  }, [isModalOpen]);
+  }, [isModalOpen, searchHistory]);
 
   useEffect(() => {
     getSearchHistory();
@@ -128,7 +129,7 @@ const SearchBarRecommendContainer: React.FC = () => {
     <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
       <PlaceCard main="주변" isLast />
       <S.SearchRecommendTextWrapper>
-        <Text size={0.8} weight={600}>
+        <Text size={0.8} weight={600} mobileBigText>
           최근 본 항목
         </Text>
       </S.SearchRecommendTextWrapper>
@@ -138,12 +139,12 @@ const SearchBarRecommendContainer: React.FC = () => {
             .slice(-5)
             .reverse()
             .map((history, i) => (
-              <PlaceCard main={history} key={i} isLast={i === 4} />
+              <PlaceCard main={history} key={i} isLast={searchHistory.slice(-5).length - 1 === i} />
             ))}
         </>
       ) : (
         <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
-          <Text size={0.8} style={{ color: theme.placeholder }}>
+          <Text size={0.8} color="placeholder" mobileBigText>
             최근 본 항목이 없습니다.
           </Text>
         </S.SearchRecommendTextWrapper>
@@ -153,6 +154,8 @@ const SearchBarRecommendContainer: React.FC = () => {
 };
 
 export const SearchBarSection: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
   const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
 
   const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
@@ -162,14 +165,18 @@ export const SearchBarSection: React.FC = () => {
   return (
     <>
       <S.SearchContentsContainer>
-        <S.SearchTitleWrapper>
-          <Text size={2.8} weight={700}>
+        <S.SearchTitleWrapper {...fadeInScroll({ delay: 0.2 })}>
+          <Text size={2.6} weight={800}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
         {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
-        <S.SearchBarContainer onClick={openModal} searchBarModalOpen={isModalOpen}>
+        <S.SearchBarContainer
+          onClick={openModal}
+          searchBarModalOpen={isModalOpen}
+          {...fadeInScroll({ delay: 0.2 })}
+        >
           <SearchInput />
           <SearchBarRecommendContainer />
         </S.SearchBarContainer>

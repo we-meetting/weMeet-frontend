@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 
+import { AnimatePresence } from 'framer-motion';
+
 import { Modal, ModalProps } from 'src/components';
 
 export interface ModalContextProps {
@@ -31,11 +33,13 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   return (
     <ModalContext.Provider value={{ open, close, closeAll }}>
-      {modals.length > 0 && (
-        <Modal.Overlay>
-          <Modal {...modals[0]} />
-        </Modal.Overlay>
-      )}
+      <AnimatePresence>
+        {modals.length > 0 && (
+          <Modal.Overlay>
+            <Modal {...modals[0]} />
+          </Modal.Overlay>
+        )}
+      </AnimatePresence>
       {children}
     </ModalContext.Provider>
   );

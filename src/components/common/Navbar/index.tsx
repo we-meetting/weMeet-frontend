@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useTheme } from '@emotion/react';
-
 import { Logo } from 'src/assets';
 import { NAVBAR_CONTENT_LIST } from 'src/constants';
 
@@ -10,9 +8,6 @@ import { Text } from '../Text';
 import * as S from './styled';
 
 export const Navbar: React.FC = () => {
-  const theme = useTheme();
-
-  // 스크롤 감지 될때 true로 바꾸기
   const [isScroll, setIsScroll] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,25 +23,34 @@ export const Navbar: React.FC = () => {
         <S.NavbarInnerContainer>
           <S.NavbarLogoContainer>
             <S.NavbarLogoImg src={Logo} alt="hello" />
-            <Text size={1.8} weight={700}>
+            <Text size={1.8} weight={700} mobileBigText>
               weMeet
             </Text>
           </S.NavbarLogoContainer>
-          <S.NavbarContentContainer>
-            {NAVBAR_CONTENT_LIST.map(({ text }, i) => (
-              <Text size={1.1} weight={500} key={i}>
+          <S.NavbarContentList>
+            {NAVBAR_CONTENT_LIST.map(({ text, href }, i) => (
+              <S.NavbarContentItem key={i} to={href}>
                 {text}
-              </Text>
+              </S.NavbarContentItem>
             ))}
-          </S.NavbarContentContainer>
+          </S.NavbarContentList>
           <S.NavbarLoginWrapper>
             <S.NavbarLoginInnerWrapper>
-              <Text size={1} weight={500} style={{ color: theme.white }}>
+              <Text color="white" mobileBigText>
                 로그인
               </Text>
             </S.NavbarLoginInnerWrapper>
           </S.NavbarLoginWrapper>
         </S.NavbarInnerContainer>
+        <S.NavbarContentListWrapper>
+          <S.NavbarMobileContentList>
+            {NAVBAR_CONTENT_LIST.map(({ text, href }, i) => (
+              <S.NavbarContentItem key={i} to={href}>
+                {text}
+              </S.NavbarContentItem>
+            ))}
+          </S.NavbarMobileContentList>
+        </S.NavbarContentListWrapper>
       </S.NavbarContainer>
     </>
   );
