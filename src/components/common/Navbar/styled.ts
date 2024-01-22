@@ -52,6 +52,9 @@ export const NavbarContentListWrapper = styled.div`
   width: 100%;
   padding-top: 1.6rem;
   padding-bottom: 1rem;
+  @media screen and (min-width: 500px) {
+    display: none;
+  }
 `;
 
 export const NavbarContentListStyle = styled.ul`
@@ -69,6 +72,9 @@ export const NavbarContentList = styled(NavbarContentListStyle)`
 `;
 
 export const NavbarMobileContentList = styled(NavbarContentListStyle)`
+  width: 100%;
+  padding-top: 1.6rem;
+  padding-bottom: 1rem;
   @media screen and (min-width: 500px) {
     display: none;
   }

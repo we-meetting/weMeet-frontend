@@ -42,15 +42,13 @@ export const Navbar: React.FC = () => {
             </S.NavbarLoginInnerWrapper>
           </S.NavbarLoginWrapper>
         </S.NavbarInnerContainer>
-        <S.NavbarContentListWrapper>
-          <S.NavbarMobileContentList>
-            {NAVBAR_CONTENT_LIST.map(({ text, href }, i) => (
-              <S.NavbarContentItem key={i} to={href}>
-                {text}
-              </S.NavbarContentItem>
-            ))}
-          </S.NavbarMobileContentList>
-        </S.NavbarContentListWrapper>
+        <S.NavbarMobileContentList>
+          {NAVBAR_CONTENT_LIST.map(({ text, href }, i) => (
+            <S.NavbarContentItem key={i} to={href}>
+              {text}
+            </S.NavbarContentItem>
+          ))}
+        </S.NavbarMobileContentList>
       </S.NavbarContainer>
     </>
   );
