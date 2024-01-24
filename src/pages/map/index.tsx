@@ -1,7 +1,10 @@
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, useKakaoLoader, CustomOverlayMap } from 'react-kakao-maps-sdk';
+
 import { Marker } from 'src/assets';
+
+import * as S from './styled';
 
 export type KeywordSearchInterface = Omit<kakao.maps.services.PlacesSearchResultItem, 'x' | 'y'> & {
   position: {
@@ -17,15 +20,17 @@ export const MapPage: React.FC = () => {
     // 추가 옵션
   });
 
+  console.log(loading, error);
+
   const [info, setInfo] = useState('');
   const [markers, setMarkers] = useState<KeywordSearchInterface[]>([]);
-  const [map, setMap] = useState();
+  const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
   useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch('서울 아쿠아리움', (data, status) => {
+    ps.keywordSearch('서울 맛집', (data, status) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -53,46 +58,73 @@ export const MapPage: React.FC = () => {
         setMarkers(markers);
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        // @ts-ignore
         map.setBounds(bounds);
       }
     });
   }, [map]);
 
-  console.log(markers);
-
   return (
-    <Map // 로드뷰를 표시할 Container
-      center={{
-        lat: 37.566826,
-        lng: 126.9786567,
-      }}
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-      level={3}
-      onCreate={setMap}
-      onClick={() => setInfo('')}
-    >
-      {markers.map((marker) => (
-        <MapMarker
-          key={`marker-${marker.id}-${marker.position.lat},${marker.position.lng}`}
-          position={marker.position}
-          onClick={() => setInfo(marker.place_name)}
-          image={{
-            src: Marker,
-            size: {
-              width: 40,
-              height: 40,
-            },
+    <>
+      {loading ? (
+        <div>
+          <h1>loading..</h1>
+        </div>
+      ) : (
+        <Map // 로드뷰를 표시할 Container
+          center={{
+            lat: 37.566826,
+            lng: 126.9786567,
           }}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          level={3}
+          onCreate={setMap}
+          onClick={() => setInfo('')}
         >
-          {info && info === marker.place_name && (
-            <div style={{ color: '#000' }}>{marker.place_name}</div>
-          )}
-        </MapMarker>
-      ))}
-    </Map>
+          {markers.map((marker) => (
+            <div key={`marker-${marker.id}-${marker.position.lat},${marker.position.lng}`}>
+              <MapMarker
+                position={marker.position}
+                onClick={() => setInfo(marker.place_name)}
+                image={{
+                  src: Marker,
+                  size: {
+                    width: 40,
+                    height: 40,
+                  },
+                  options: {
+                    offset: {
+                      x: 27,
+                      y: 69,
+                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                  },
+                }}
+              />
+              {info && info === marker.place_name && (
+                <CustomOverlayMap position={marker.position} clickable yAnchor={2.8}>
+                  <S.MapMarkerBox>
+                    <S.MapMarkerBoxLink to={marker.place_url} target="_blank">
+                      {marker.place_name}
+                    </S.MapMarkerBoxLink>
+                    <S.MapMarkerBoxAddress>
+                      {marker.road_address_name}
+                      <S.MapMarkerBoxAddressLink
+                        to={`https://map.kakao.com/link/to/${marker.id}`}
+                        target="_blank"
+                      >
+                        {' '}
+                        (길찾기)
+                      </S.MapMarkerBoxAddressLink>
+                    </S.MapMarkerBoxAddress>
+                  </S.MapMarkerBox>
+                </CustomOverlayMap>
+              )}
+            </div>
+          ))}
+        </Map>
+      )}
+    </>
   );
 };
