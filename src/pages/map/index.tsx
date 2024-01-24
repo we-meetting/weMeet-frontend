@@ -20,8 +20,6 @@ export const MapPage: React.FC = () => {
     // 추가 옵션
   });
 
-  console.log(loading, error);
-
   const [info, setInfo] = useState('');
   const [markers, setMarkers] = useState<KeywordSearchInterface[]>([]);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);

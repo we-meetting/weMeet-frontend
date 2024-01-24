@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import { IoSearchOutline } from 'react-icons/io5';
 
 import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
 
 import { Container } from 'src/components/layouts';
 
-export const NavbarContainer = styled.div<{ isScroll: boolean }>`
+export const NavbarContainer = styled.div<{ isScroll: boolean; isMapPage: boolean }>`
   width: 100%;
   position: fixed;
   top: 0;
@@ -17,6 +19,10 @@ export const NavbarContainer = styled.div<{ isScroll: boolean }>`
   z-index: 96;
   padding: 1rem 0;
   background-color: ${({ theme }) => theme.white};
+  @media screen and (max-width: 1000px) {
+    row-gap: 1.4rem;
+    padding-bottom: ${({ isMapPage }) => (isMapPage ? '0' : '1rem')};
+  }
   @media screen and (max-width: 500px) {
     padding-bottom: 0;
   }
@@ -48,15 +54,6 @@ export const NavbarLogoImg = styled.img`
   }
 `;
 
-export const NavbarContentListWrapper = styled.div`
-  width: 100%;
-  padding-top: 1.6rem;
-  padding-bottom: 1rem;
-  @media screen and (min-width: 500px) {
-    display: none;
-  }
-`;
-
 export const NavbarContentListStyle = styled.ul`
   display: flex;
   justify-content: center;
@@ -71,10 +68,9 @@ export const NavbarContentList = styled(NavbarContentListStyle)`
   }
 `;
 
-export const NavbarMobileContentList = styled(NavbarContentListStyle)`
+export const NavbarMobileContentList = styled(NavbarContentListStyle)<{ isMapPage: boolean }>`
   width: 100%;
-  padding-top: 1.6rem;
-  padding-bottom: 1rem;
+  padding-bottom: ${({ isMapPage }) => (isMapPage ? '0' : '1rem')};
   @media screen and (min-width: 500px) {
     display: none;
   }
@@ -111,5 +107,70 @@ export const NavbarLoginInnerWrapper = styled.div`
   }
   @media screen and (max-width: 500px) {
     font-size: 1.2rem;
+  }
+`;
+
+export const NavbarSearchBarContainerStyle = styled(motion.form)`
+  flex: 1 1 0%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  @media screen and (max-width: 991px) {
+    padding-left: 3.2rem;
+    padding-right: 3.2rem;
+  }
+`;
+
+export const NavbarSearchBarContainer = styled(NavbarSearchBarContainerStyle)`
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+`;
+
+export const NavbarSearchBarMobileContainer = styled(NavbarSearchBarContainerStyle)`
+  width: 80%;
+  justify-content: center;
+  padding-bottom: 1rem;
+  @media screen and (min-width: 1001px) {
+    display: none;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
+`;
+
+export const NavbarSearchBarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 0.2rem;
+  width: 80%;
+  border-radius: 2rem;
+  padding: 0.4rem 0.4rem;
+  border: 0.6px solid ${({ theme }) => theme.placeholder};
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    column-gap: 0;
+  }
+`;
+
+export const NavbarSearchBarIcon = styled(IoSearchOutline)`
+  width: 1.3rem;
+  height: 1.3rem;
+  @media screen and (max-width: 500px) {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+`;
+
+export const NavbarSearchBarInput = styled.input`
+  width: 100%;
+  border: none;
+  &::placeholder {
+    color: ${({ theme }) => theme.placeholder};
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+    height: 100%;
+    padding-left: 0.4rem;
   }
 `;
