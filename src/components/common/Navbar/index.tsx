@@ -7,6 +7,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Logo } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
+import { useMapKeywordStore } from 'src/stores';
 
 import { Text } from '../Text';
 
@@ -21,6 +22,8 @@ export interface SearchInterface {
 }
 
 export const Navbar: React.FC = () => {
+  const { setMapKeyword } = useMapKeywordStore();
+
   const { windowSize } = useGetWindowSize();
 
   const { handleSubmit, register, setValue } = useForm<SearchInterface>();
@@ -39,7 +42,10 @@ export const Navbar: React.FC = () => {
 
   const [isScroll, setIsScroll] = useState<boolean>(false);
 
-  const onSubmit = ({ keyword }: SearchInterface) => {};
+  const onSubmit = ({ keyword }: SearchInterface) => {
+    setMapKeyword(keyword);
+    setValue('keyword', '');
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', () => {

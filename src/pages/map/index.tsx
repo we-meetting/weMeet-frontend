@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, useKakaoLoader, CustomOverlayMap } from 'react-kakao-maps-sdk';
 
 import { Marker } from 'src/assets';
+import { useMapKeywordStore } from 'src/stores';
 
 import * as S from './styled';
 
@@ -14,7 +15,9 @@ export type KeywordSearchInterface = Omit<kakao.maps.services.PlacesSearchResult
 };
 
 export const MapPage: React.FC = () => {
-  const [loading, error] = useKakaoLoader({
+  const { mapKeyword } = useMapKeywordStore();
+
+  const [loading] = useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY, // 발급 받은 APPKEY
     libraries: ['services', 'clusterer'], // 사용할 라이브러리 목록
     // 추가 옵션
@@ -28,7 +31,7 @@ export const MapPage: React.FC = () => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch('서울 맛집', (data, status) => {
+    ps.keywordSearch(mapKeyword, (data, status) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -59,7 +62,7 @@ export const MapPage: React.FC = () => {
         map.setBounds(bounds);
       }
     });
-  }, [map]);
+  }, [map, mapKeyword]);
 
   return (
     <>
