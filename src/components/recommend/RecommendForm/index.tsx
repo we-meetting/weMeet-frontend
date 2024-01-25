@@ -7,7 +7,7 @@ import { useFadeInScroll } from 'src/hooks';
 
 import * as S from './styled';
 
-export interface RecommendFormProps {
+export type RecommendFormProps = Pick<React.HTMLAttributes<HTMLFormElement>, 'onSubmit'> & {
   title: string;
   subTitle?: string;
   button: {
@@ -15,7 +15,7 @@ export interface RecommendFormProps {
     onClick: () => void;
   };
   children: React.ReactNode;
-}
+};
 
 export const RecommendForm: React.FC<RecommendFormProps> = ({
   title,
@@ -36,7 +36,9 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
           </Text>
         )}
       </S.RecommendFormTitleContainer>
-      <motion.div {...fadeInScroll({ delay: 0.4 })}>{children}</motion.div>
+      <S.RecommendFormContentWrapper {...fadeInScroll({ delay: 0.4 })}>
+        {children}
+      </S.RecommendFormContentWrapper>
       <S.RecommendFormButton onClick={button.onClick} {...fadeInScroll({ delay: 0.6 })}>
         {button.text}
       </S.RecommendFormButton>

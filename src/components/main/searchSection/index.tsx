@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
@@ -46,6 +47,8 @@ const SearchSubjectContainer: React.FC = () => {
 };
 
 const SearchInput: React.FC = () => {
+  const theme = useTheme();
+
   const { windowSize } = useGetWindowSize();
 
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
@@ -96,7 +99,7 @@ const SearchInput: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <Text size={1.1} color="white" mobileBigText>
+            <Text size={1.1} color={theme.white} mobileBigText>
               검색
             </Text>
           </S.SearchBarButton>
@@ -107,6 +110,8 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
+  const theme = useTheme();
+
   const { searchHistory } = useSearchBarStore.history();
   const { isModalOpen } = useSearchBarStore.modal();
 
@@ -144,7 +149,7 @@ const SearchBarRecommendContainer: React.FC = () => {
         </>
       ) : (
         <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
-          <Text size={0.8} color="placeholder" mobileBigText>
+          <Text size={0.8} color={theme.placeholder} mobileBigText>
             최근 본 항목이 없습니다.
           </Text>
         </S.SearchRecommendTextWrapper>

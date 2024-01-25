@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
 import { Logo } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
@@ -22,6 +23,8 @@ export interface SearchInterface {
 }
 
 export const Navbar: React.FC = () => {
+  const theme = useTheme();
+
   const { setMapKeyword } = useMapKeywordStore();
 
   const { windowSize } = useGetWindowSize();
@@ -87,7 +90,7 @@ export const Navbar: React.FC = () => {
           </S.NavbarContentList>
           <S.NavbarLoginWrapper>
             <S.NavbarLoginInnerWrapper>
-              <Text color="white" mobileBigText>
+              <Text color={theme.white} mobileBigText>
                 로그인
               </Text>
             </S.NavbarLoginInnerWrapper>

@@ -40,3 +40,9 @@ export const RecommendFormButton = styled(motion.button)`
     font-size: 1.2rem;
   }
 `;
+
+export const RecommendFormContentWrapper = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
