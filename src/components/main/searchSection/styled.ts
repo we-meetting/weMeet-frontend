@@ -12,7 +12,10 @@ export const SearchContentsContainer = styled(motion.div)`
   align-items: center;
 `;
 
-export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boolean }>`
+export const SearchBarContainer = styled(motion.div)<{
+  searchBarModalOpen: boolean;
+  isSearchHistoryFull: boolean;
+}>`
   background-color: ${({ theme }) => theme.white};
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
   border: 2px solid ${({ theme }) => theme.softWhite};
@@ -33,7 +36,7 @@ export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boole
     width: 100%;
   }
 
-  ${({ searchBarModalOpen }) =>
+  ${({ searchBarModalOpen, isSearchHistoryFull }) =>
     searchBarModalOpen
       ? css`
           padding: 1rem 0.4rem;
@@ -41,6 +44,7 @@ export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boole
           row-gap: 1rem;
           border-radius: 1rem;
           border: none;
+          margin-bottom: ${isSearchHistoryFull ? '2rem' : '0'};
         `
       : css`
           border-radius: 5rem;

@@ -12,7 +12,7 @@ import * as S from './styled';
 const SearchSubjectContainer: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const setSearchSubject = useSearchBarStore.subject((store) => store.setSubject);
+  const { setSubject } = useSearchBarStore.subject();
 
   const [selectedCategory, setSelectedCategory] = useState(
     SEARCHBAR_CONTENT_LIST.map((_, i) => (i === 0 ? true : false)),
@@ -24,7 +24,7 @@ const SearchSubjectContainer: React.FC = () => {
 
   const onChangeSearchSubject = (textValue: SearchBarContentItem['text'], index: number) => {
     onPressCategory(index);
-    setSearchSubject(textValue);
+    setSubject(textValue);
   };
 
   return (
@@ -50,9 +50,9 @@ const SearchInput: React.FC = () => {
 
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
 
-  const setSearchHistory = useSearchBarStore.history((store) => store.setSearchHistory);
+  const { setSearchHistory } = useSearchBarStore.history();
 
-  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
+  const isModalOpen = useSearchBarStore.modal((store) => store.isModalOpen);
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -107,10 +107,10 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
-  const searchHistory = useSearchBarStore.history((store) => store.searchHistory);
-  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
+  const { searchHistory } = useSearchBarStore.history();
+  const { isModalOpen } = useSearchBarStore.modal();
 
-  const getSearchHistory = useSearchBarStore.history((store) => store.getSearchHistory);
+  const { getSearchHistory } = useSearchBarStore.history();
 
   const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
 
@@ -156,11 +156,13 @@ const SearchBarRecommendContainer: React.FC = () => {
 export const SearchBarSection: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const dynamicTitle = useSearchBarStore.subject((store) => store.dynamicTitle);
+  const { searchHistory } = useSearchBarStore.history();
 
-  const isModalOpen = useSearchBarStore.modal((store) => store.isOpen);
-  const openModal = useSearchBarStore.modal((store) => store.openModal);
-  const closeModal = useSearchBarStore.modal((store) => store.closeModal);
+  const { dynamicTitle } = useSearchBarStore.subject();
+
+  const { isModalOpen } = useSearchBarStore.modal();
+  const { openModal } = useSearchBarStore.modal();
+  const { closeModal } = useSearchBarStore.modal();
 
   return (
     <>
@@ -176,6 +178,7 @@ export const SearchBarSection: React.FC = () => {
           onClick={openModal}
           searchBarModalOpen={isModalOpen}
           {...fadeInScroll({ delay: 0.2 })}
+          isSearchHistoryFull={searchHistory.length == 5}
         >
           <SearchInput />
           <SearchBarRecommendContainer />

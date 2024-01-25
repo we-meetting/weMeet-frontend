@@ -17,11 +17,11 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --mode dev",
+    "build": "tsc && vite --mode prod build",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx,json}\" --fix --cache",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
-    "preview": "vite preview",
+    "preview": "vite --mode prod preview",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.3",
     "react-icons": "^5.0.1",
+    "react-kakao-maps-sdk": "^1.1.26",
     "react-router-dom": "^6.21.1",
     "terser": "^5.26.0",
     "zustand": "^4.4.7"

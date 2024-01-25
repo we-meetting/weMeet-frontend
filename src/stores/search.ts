@@ -11,8 +11,8 @@ export interface SearchSubjectState {
 export const useSearchSubjectStore = create<SearchSubjectState>((set) => ({
   dynamicPlaceholder: '음식점, 즐길 거리, 동네 등 ',
   dynamicTitle: '어디로 가시나요?',
-  setSubject: (subjet) => {
-    switch (subjet) {
+  setSubject: (subject) => {
+    switch (subject) {
       case '전체 검색':
         set({
           dynamicPlaceholder: '음식점, 즐길 거리, 동네 등 ',
@@ -81,21 +81,21 @@ export const useSearchHistoryStore = create<SearchHistoryState>((set) => ({
 }));
 
 export interface SearchBarModalState {
-  isOpen: boolean;
+  isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
 }
 
 export const useSearchBarModalStore = create<SearchBarModalState>((set) => ({
-  isOpen: false,
+  isModalOpen: false,
   openModal: () => {
     set({
-      isOpen: true,
+      isModalOpen: true,
     });
   },
   closeModal: () => {
     set({
-      isOpen: false,
+      isModalOpen: false,
     });
   },
 }));
