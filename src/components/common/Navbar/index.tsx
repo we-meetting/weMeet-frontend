@@ -32,7 +32,10 @@ export const Navbar: React.FC = () => {
     return (
       <S.NavbarSearchBarWrapper>
         <S.NavbarSearchBarIcon />
-        <S.NavbarSearchBarInput placeholder="검색어를 입력해주세요." {...register('keyword')} />
+        <S.NavbarSearchBarInput
+          placeholder="검색어를 입력해주세요. ex) 카페, 맛집, 편의점"
+          {...register('keyword')}
+        />
       </S.NavbarSearchBarWrapper>
     );
   };
