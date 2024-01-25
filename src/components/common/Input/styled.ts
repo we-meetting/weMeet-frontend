@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 export const InputContainer = styled.div<{ error: boolean }>`
   position: relative;
   padding: 15px 0 0;
-  margin-top: 10px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -12,12 +11,9 @@ export const InputContainer = styled.div<{ error: boolean }>`
   ${({ error, theme }) =>
     error &&
     css`
-      /* & > input {
+      & > input {
         border-bottom: 1px solid ${theme.danger};
       }
-      & > label {
-        color: ${theme.danger};
-      } */
     `}
 `;
 

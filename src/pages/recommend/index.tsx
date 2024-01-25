@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Input, RecommendForm } from 'src/components';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import { Input, RecommendForm, Text } from 'src/components';
 import { RECOMMEND_CONTENTS_LIST } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
 
@@ -20,6 +22,8 @@ export const RecommendPage: React.FC = () => {
     formState: { errors },
   } = useForm<RecommendForm>();
 
+  const [isTodo, setIsTodo] = useState<boolean>(false);
+
   const { windowSize } = useGetWindowSize();
 
   const itemNum = windowSize > 768 ? 5 : 4;
@@ -30,6 +34,10 @@ export const RecommendPage: React.FC = () => {
       result.push(list.slice(i, i + itemNum));
     }
     return result;
+  };
+
+  const onHandleTodo = () => {
+    setIsTodo((prev) => !prev);
   };
 
   const onSubmit = (data: RecommendForm) => {
@@ -83,6 +91,16 @@ export const RecommendPage: React.FC = () => {
           message={errors.region?.message}
           error={Boolean(errors.region?.message)}
         />
+        <S.RecommendTypeContainer>
+          <Text size={1} weight={500} mobileBigText>
+            할 일
+          </Text>
+          <AnimatePresence>
+            <S.RecommendIconWrapper onClick={onHandleTodo} whileTap={{ scale: 0.8 }}>
+              {isTodo ? <S.RecommendCheckFillIcon /> : <S.RecommendCheckOutlineIcon />}
+            </S.RecommendIconWrapper>
+          </AnimatePresence>
+        </S.RecommendTypeContainer>
       </S.RecommendContainer>
     </RecommendForm>
   );

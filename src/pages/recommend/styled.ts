@@ -1,4 +1,7 @@
+import { BsCheckCircle, BsFillCheckCircleFill } from 'react-icons/bs';
+
 import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
 
 export const RecommendResultContainer = styled.div`
   display: flex;
@@ -45,56 +48,31 @@ export const RecommendContainer = styled.form`
   }
 `;
 
-export const RecommendInputContainer = styled.div`
-  position: relative;
-  padding: 15px 0 0;
-  margin-top: 10px;
+export const RecommendTypeContainer = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
 `;
 
-export const RecommendInput = styled.input`
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid ${({ theme }) => theme.placeholder};
-  outline: 0;
-  font-size: 16px;
-  color: #212121;
-  padding: 7px 0;
-  background: transparent;
-  transition: border-color 0.2s;
-  width: 100%;
-
-  &::placeholder {
-    color: transparent;
+export const RecommendIconWrapper = styled(motion.div)`
+  width: 1.4rem;
+  height: 1.4rem;
+  @media screen and (max-width: 500px) {
+    width: 1.6rem;
+    height: 1.6rem;
   }
-
-  &:placeholder-shown ~ label {
-    font-size: 16px;
-    cursor: text;
-    top: 24px;
-  }
-
-  &:focus ~ label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 12px;
-    color: ${({ theme }) => theme.primary};
-  }
-
-  &:focus {
-    padding-bottom: 7px;
-    border-bottom: 2px solid ${({ theme }) => theme.primary};
-  }
+  user-select: none;
 `;
 
-export const RecommendInputLabel = styled.label`
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 12px;
+export const RecommendCheckOutlineIcon = styled(BsCheckCircle)`
+  width: 100%;
+  height: 100%;
   color: ${({ theme }) => theme.placeholder};
-  pointer-events: none;
+`;
+
+export const RecommendCheckFillIcon = styled(BsFillCheckCircleFill)`
+  width: 100%;
+  height: 100%;
+  color: ${({ theme }) => theme.primary};
 `;
