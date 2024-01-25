@@ -3,7 +3,7 @@ import { BsCheckCircle, BsFillCheckCircleFill } from 'react-icons/bs';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-export const RecommendResultContainer = styled.div`
+export const RecommendResultContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   row-gap: 0.6rem;

@@ -1,9 +1,6 @@
 import React from 'react';
 
-import { motion } from 'framer-motion';
-
 import { Text } from 'src/components/common';
-import { useFadeInScroll } from 'src/hooks';
 
 import * as S from './styled';
 
@@ -23,10 +20,9 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
   button,
   children,
 }) => {
-  const { fadeInScroll } = useFadeInScroll();
   return (
     <S.RecommendFormContainer>
-      <S.RecommendFormTitleContainer {...fadeInScroll({ delay: 0 })}>
+      <S.RecommendFormTitleContainer>
         <Text size={2.6} weight={700}>
           {title}
         </Text>
@@ -36,12 +32,8 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
           </Text>
         )}
       </S.RecommendFormTitleContainer>
-      <S.RecommendFormContentWrapper {...fadeInScroll({ delay: 0.4 })}>
-        {children}
-      </S.RecommendFormContentWrapper>
-      <S.RecommendFormButton onClick={button.onClick} {...fadeInScroll({ delay: 0.6 })}>
-        {button.text}
-      </S.RecommendFormButton>
+      <S.RecommendFormContentWrapper>{children}</S.RecommendFormContentWrapper>
+      <S.RecommendFormButton onClick={button.onClick}>{button.text}</S.RecommendFormButton>
     </S.RecommendFormContainer>
   );
 };
