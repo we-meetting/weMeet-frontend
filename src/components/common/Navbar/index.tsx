@@ -25,7 +25,7 @@ export interface SearchInterface {
 export const Navbar: React.FC = () => {
   const theme = useTheme();
 
-  const { setMapKeyword } = useMapKeywordStore();
+  const { setKeyword: setMapKeyword } = useMapKeywordStore();
 
   const { windowSize } = useGetWindowSize();
 

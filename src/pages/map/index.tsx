@@ -1,21 +1,43 @@
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, useKakaoLoader, CustomOverlayMap } from 'react-kakao-maps-sdk';
+import { useLocation } from 'react-router-dom';
 
 import { Marker } from 'src/assets';
 import { useMapKeywordStore } from 'src/stores';
 
 import * as S from './styled';
 
-export type KeywordSearchInterface = Omit<kakao.maps.services.PlacesSearchResultItem, 'x' | 'y'> & {
+export type KeywordSearchInterface = {
+  place_name: string;
+  place_url: string;
   position: {
     lat: number;
     lng: number;
   };
+  id?: string;
+  road_address_name: string;
+};
+
+export type LocationSearchInterface = {
+  address_name: string;
+  address_type: 'REGION' | 'ROAD' | 'REGION_ADDR' | 'ROAD_ADDR';
+  x: string;
+  y: string;
+  address: kakao.maps.services.Address;
+  road_address: kakao.maps.services.RoadAaddress;
+  coords: kakao.maps.LatLng;
 };
 
 export const MapPage: React.FC = () => {
-  const { mapKeyword } = useMapKeywordStore();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const dataLocation = queryParams.get('location');
+  console.log(dataLocation);
+  const placeName = queryParams.get('placeName');
+
+  const { keyword } = useMapKeywordStore();
 
   const [loading] = useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY, // 발급 받은 APPKEY
@@ -30,39 +52,56 @@ export const MapPage: React.FC = () => {
   useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
+    const geocoder = new kakao.maps.services.Geocoder();
+    const bounds = new kakao.maps.LatLngBounds();
 
-    ps.keywordSearch(mapKeyword, (data, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers: KeywordSearchInterface[] = [];
+    if (!dataLocation && keyword !== '') {
+      ps.keywordSearch(keyword, (data, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          let markers: KeywordSearchInterface[] = [];
 
-        for (let i = 0; i < data.length; i++) {
-          markers.push({
-            position: {
-              lat: +data[i].y,
-              lng: +data[i].x,
-            },
-            place_name: data[i].place_name,
-            address_name: data[i].address_name,
-            category_name: data[i].category_name,
-            road_address_name: data[i].road_address_name,
-            id: data[i].id,
-            phone: data[i].phone,
-            place_url: data[i].place_url,
-            category_group_name: data[i].category_group_name,
-            distance: data[i].distance,
-          });
-          bounds.extend(new kakao.maps.LatLng(+data[i].y, +data[i].x));
+          for (let i = 0; i < data.length; i++) {
+            markers.push({
+              position: {
+                lat: +data[i].y,
+                lng: +data[i].x,
+              },
+              ...data[i],
+            });
+            bounds.extend(new kakao.maps.LatLng(+data[i].y, +data[i].x));
+          }
+          setMarkers(markers);
+
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+          map.setBounds(bounds);
         }
-        setMarkers(markers);
+      });
+    } else {
+      geocoder.addressSearch(dataLocation || '', (data, status) => {
+        console.log(data);
+        if (status === kakao.maps.services.Status.OK) {
+          const coords = new kakao.maps.LatLng(+data[0].y, +data[0].x);
 
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
-      }
-    });
-  }, [map, mapKeyword]);
+          map.setCenter(coords);
+
+          bounds.extend(new kakao.maps.LatLng(+data[0].y, +data[0].x));
+          setMarkers([
+            {
+              position: {
+                lat: +data[0].y,
+                lng: +data[0].x,
+              },
+              place_name: placeName || '',
+              place_url: '',
+              road_address_name: data[0].address_name,
+            },
+          ]);
+        }
+      });
+    }
+  }, [map, keyword]);
 
   return (
     <>
@@ -112,7 +151,11 @@ export const MapPage: React.FC = () => {
                     <S.MapMarkerBoxAddress>
                       {marker.road_address_name}
                       <S.MapMarkerBoxAddressLink
-                        to={`https://map.kakao.com/link/to/${marker.id}`}
+                        to={`https://map.kakao.com/link/to/${
+                          marker.id
+                            ? marker.id
+                            : `${placeName},${marker.position.lat},${marker.position.lng}`
+                        }`}
                         target="_blank"
                       >
                         {' '}

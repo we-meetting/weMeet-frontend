@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
@@ -22,7 +22,6 @@ export const RecommendPage: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
   const { data, setData } = useRecommendStore();
-  console.log(data, 'data');
 
   const { mutate, isLoading } = useRecommendMutation();
 
@@ -76,8 +75,14 @@ export const RecommendPage: React.FC = () => {
             {splitRecommendContentsList(typeof data === 'string' ? JSON.parse(data) : data).map(
               (list, index) => (
                 <S.RecommendResultCardContainer key={index}>
-                  {list.map((item, index) => (
-                    <S.RecommendResultCard key={index}>{item.name}</S.RecommendResultCard>
+                  {list.map(({ location, name }, index) => (
+                    <S.RecommendResultCard key={index}>
+                      <S.RecommendResultCardLink
+                        to={`/map/?location=${location}&placeName=${name}`}
+                      >
+                        {name}
+                      </S.RecommendResultCardLink>
+                    </S.RecommendResultCard>
                   ))}
                 </S.RecommendResultCardContainer>
               ),

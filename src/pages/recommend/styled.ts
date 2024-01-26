@@ -1,4 +1,5 @@
 import { BsCheckCircle, BsFillCheckCircleFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
@@ -27,9 +28,13 @@ export const RecommendResultCard = styled.button`
   &:hover {
     opacity: 0.8;
   }
+`;
+
+export const RecommendResultCardLink = styled(Link)`
   font-size: 1rem;
   font-weight: 500;
   color: ${({ theme }) => theme.white};
+  text-decoration: none;
   @media screen and (max-width: 500px) {
     font-size: 1.2rem;
   }

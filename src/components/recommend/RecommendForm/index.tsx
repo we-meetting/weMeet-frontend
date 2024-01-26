@@ -24,7 +24,6 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
   children,
   isLoading = false,
 }) => {
-  console.log(isLoading, 'isLoading');
   const theme = useTheme();
 
   return (
