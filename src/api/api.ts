@@ -7,6 +7,7 @@ export const API_SUFFIX = {
   PROFILE: '/auth/@me',
   REFRESH: '/auth/silent',
   RECOMMEND: '/recommend',
+  SEARCH: '/search',
 };
 
 export const instance = axios.create({

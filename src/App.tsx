@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import { Global, Theme, ThemeProvider } from '@emotion/react';
 
@@ -10,7 +10,7 @@ import { Router } from './Router';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const client = new QueryClient();
+const client = new QueryClient({ defaultOptions: { queries: { retry: 0 } } });
 
 export const App: React.FC = () => {
   const [theme] = useState<Theme>(lightTheme);

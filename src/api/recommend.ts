@@ -1,4 +1,4 @@
-import { APIResponse, API_SUFFIX, instance } from './api';
+import { API_SUFFIX, instance } from './api';
 
 export interface RecommendValues {
   city: string;

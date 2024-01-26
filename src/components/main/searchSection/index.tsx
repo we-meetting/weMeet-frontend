@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AnimatePresence } from 'framer-motion';
@@ -7,6 +8,8 @@ import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
 import { useSearchBarStore } from 'src/stores';
 import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
+import { useSearchQuery } from 'src/hooks/queries/useSearchQuery';
+import { useDebounce } from 'src/hooks/useDebounce';
 
 import * as S from './styled';
 
@@ -60,6 +63,15 @@ const SearchInput: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const [searchText, setSearchText] = useState<string>('');
+
+  const { debouncedValue } = useDebounce(searchText, 200);
+
+  const { data, isLoading } = useSearchQuery({
+    keyword: debouncedValue,
+    enabled: debouncedValue.length > 0,
+  });
+
+  console.log(data);
 
   const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);

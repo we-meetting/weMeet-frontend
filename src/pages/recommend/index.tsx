@@ -4,9 +4,7 @@ import { useForm } from 'react-hook-form';
 import { AnimatePresence } from 'framer-motion';
 
 import { Input, RecommendForm, Text } from 'src/components';
-import { useGetWindowSize } from 'src/hooks';
-import { useRecommendMutation } from 'src/hooks/queries';
-import { useRecommendStore } from 'src/stores';
+import { useGetWindowSize, useRecommendMutation } from 'src/hooks';
 import { RecommendResponse } from 'src/api';
 import { useFadeInScroll } from 'src/hooks';
 
@@ -21,9 +19,8 @@ export interface RecommendForm {
 export const RecommendPage: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const { recommend: data, setRecommend: setData } = useRecommendStore();
-
-  const { mutate, isLoading } = useRecommendMutation();
+  const { data, mutate, isLoading } = useRecommendMutation();
+  const recommendData = data?.result;
 
   const {
     register,
@@ -32,6 +29,7 @@ export const RecommendPage: React.FC = () => {
   } = useForm<RecommendForm>();
 
   const [isTodo, setIsTodo] = useState<boolean>(false);
+  const [isResultSection, setIsResultSection] = useState<boolean>(false);
 
   const { windowSize } = useGetWindowSize();
 
@@ -50,6 +48,7 @@ export const RecommendPage: React.FC = () => {
   };
 
   const onSubmit = ({ city, district, region }: RecommendForm) => {
+    setIsResultSection(true);
     mutate({
       city,
       district,
@@ -60,33 +59,31 @@ export const RecommendPage: React.FC = () => {
 
   return (
     <>
-      {!isLoading && data && data?.length > 0 ? (
+      {!isLoading && recommendData && recommendData.length > 0 && isResultSection ? (
         <RecommendForm
           title="어떤 취향이신가요?"
           subTitle="선택한 장소가 지도에 표시돼요!"
           button={{
             text: '다시 생성하기',
             onClick: () => {
-              setData([]);
+              setIsResultSection(false);
             },
           }}
         >
           <S.RecommendResultContainer {...fadeInScroll({ delay: 0.2 })}>
-            {splitRecommendContentsList(typeof data === 'string' ? JSON.parse(data) : data).map(
-              (list, index) => (
-                <S.RecommendResultCardContainer key={index}>
-                  {list.map(({ location, name }, index) => (
-                    <S.RecommendResultCard key={index}>
-                      <S.RecommendResultCardLink
-                        to={`/map/?location=${location}&placeName=${name}`}
-                      >
-                        {name}
-                      </S.RecommendResultCardLink>
-                    </S.RecommendResultCard>
-                  ))}
-                </S.RecommendResultCardContainer>
-              ),
-            )}
+            {splitRecommendContentsList(
+              typeof recommendData === 'string' ? JSON.parse(recommendData) : recommendData,
+            ).map((list, index) => (
+              <S.RecommendResultCardContainer key={index}>
+                {list.map(({ location, name }, index) => (
+                  <S.RecommendResultCard key={index}>
+                    <S.RecommendResultCardLink to={`/map/?location=${location}&placeName=${name}`}>
+                      {name}
+                    </S.RecommendResultCardLink>
+                  </S.RecommendResultCard>
+                ))}
+              </S.RecommendResultCardContainer>
+            ))}
           </S.RecommendResultContainer>
         </RecommendForm>
       ) : (
