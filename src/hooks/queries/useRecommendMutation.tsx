@@ -1,4 +1,5 @@
 import { useMutation, UseMutationResult } from 'react-query';
+import { toast } from 'react-toastify';
 
 import { AxiosError } from 'axios';
 
@@ -10,12 +11,13 @@ export const useRecommendMutation = (): UseMutationResult<
   AxiosError<APIResponse<void>>,
   RecommendValues
 > => {
-  const { setData } = useRecommendStore();
+  const { setRecommend: setData } = useRecommendStore();
   return useMutation('useRecommendMutation', recommend, {
     onSuccess: (data) => {
       setData(data.result);
     },
     onError: (error) => {
+      toast.error(error.response?.data.message);
       console.log(error);
     },
   });

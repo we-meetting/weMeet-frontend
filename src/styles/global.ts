@@ -1,9 +1,12 @@
 import { Theme, css } from '@emotion/react';
 
 import { reset } from './reset';
+import { toastify } from './toastify';
 
 export const globalStyle = (theme: Theme) => css`
   ${reset}
+  ${toastify}
+
   * {
     box-sizing: border-box;
     &:focus {

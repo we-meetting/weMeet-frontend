@@ -21,7 +21,7 @@ export interface RecommendForm {
 export const RecommendPage: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const { data, setData } = useRecommendStore();
+  const { recommend: data, setRecommend: setData } = useRecommendStore();
 
   const { mutate, isLoading } = useRecommendMutation();
 

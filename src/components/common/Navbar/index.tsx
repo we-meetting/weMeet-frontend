@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from '@emotion/react';
 
-import { Logo } from 'src/assets';
+import { LogoSvg } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
 import { useMapKeywordStore } from 'src/stores';
@@ -25,7 +25,7 @@ export interface SearchInterface {
 export const Navbar: React.FC = () => {
   const theme = useTheme();
 
-  const { setKeyword: setMapKeyword } = useMapKeywordStore();
+  const { setMapKeyword: setMapKeyword } = useMapKeywordStore();
 
   const { windowSize } = useGetWindowSize();
 
@@ -65,7 +65,7 @@ export const Navbar: React.FC = () => {
       <S.NavbarContainer isScroll={isScroll} isMapPage={isMapPage}>
         <S.NavbarInnerContainer>
           <S.NavbarLogoContainer>
-            <S.NavbarLogoImg src={Logo} alt="hello" />
+            <S.NavbarLogoImg src={LogoSvg} alt="hello" />
             <Text size={1.8} weight={700} mobileBigText>
               weMeet
             </Text>

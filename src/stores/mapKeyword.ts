@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-export interface MapKeywordState {
-  keyword: string;
-  setKeyword: (keyword: string) => void;
+export interface MapKeywordStore {
+  mapKeyword: string;
+  setMapKeyword: (keyword: string) => void;
 }
 
-export const useMapKeywordStore = create<MapKeywordState>((set) => ({
-  keyword: '서울 맛집',
-  setKeyword: (mapKeyword) => {
-    set({ keyword: mapKeyword });
+export const useMapKeywordStore = create<MapKeywordStore>((set) => ({
+  mapKeyword: '서울 맛집',
+  setMapKeyword: (mapKeyword) => {
+    set({ mapKeyword: mapKeyword });
   },
 }));

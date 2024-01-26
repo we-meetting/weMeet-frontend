@@ -1,2 +1,2 @@
-export { default as Logo } from './logo.svg';
-export { default as Marker } from './marker.svg';
+export { default as LogoSvg } from './logo.svg';
+export { default as MarkerSvg } from './marker.svg';
