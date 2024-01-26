@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
@@ -21,7 +21,8 @@ export interface RecommendForm {
 export const RecommendPage: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const { data } = useRecommendStore();
+  const { data, setData } = useRecommendStore();
+  console.log(data, 'data');
 
   const { mutate, isLoading } = useRecommendMutation();
 
@@ -66,7 +67,9 @@ export const RecommendPage: React.FC = () => {
           subTitle="선택한 장소가 지도에 표시돼요!"
           button={{
             text: '다시 생성하기',
-            onClick: handleSubmit(onSubmit),
+            onClick: () => {
+              setData([]);
+            },
           }}
         >
           <S.RecommendResultContainer {...fadeInScroll({ delay: 0.2 })}>
@@ -88,6 +91,7 @@ export const RecommendPage: React.FC = () => {
             text: '생성하기',
             onClick: handleSubmit(onSubmit),
           }}
+          isLoading={isLoading}
         >
           <S.RecommendContainer>
             <Input
@@ -118,11 +122,6 @@ export const RecommendPage: React.FC = () => {
                 </S.RecommendIconWrapper>
               </AnimatePresence>
             </S.RecommendTypeContainer>
-            {isLoading ? (
-              <Text size={1} weight={500} mobileBigText>
-                로딩중...
-              </Text>
-            ) : null}
           </S.RecommendContainer>
         </RecommendForm>
       )}

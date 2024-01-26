@@ -21,6 +21,7 @@ export const InputElement = styled.input`
   width: 100%;
   border: 0;
   border-bottom: 1px solid ${({ theme }) => theme.placeholder};
+  border-radius: 0;
   outline: 0;
   font-size: 16px;
   color: #212121;

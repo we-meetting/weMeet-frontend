@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Text } from 'src/components/common';
+import { useTheme } from '@emotion/react';
+
+import { Text, Spinner } from 'src/components';
 
 import * as S from './styled';
 
@@ -12,6 +14,7 @@ export type RecommendFormProps = Pick<React.HTMLAttributes<HTMLFormElement>, 'on
     onClick: () => void;
   };
   children: React.ReactNode;
+  isLoading?: boolean;
 };
 
 export const RecommendForm: React.FC<RecommendFormProps> = ({
@@ -19,7 +22,11 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
   subTitle,
   button,
   children,
+  isLoading = false,
 }) => {
+  console.log(isLoading, 'isLoading');
+  const theme = useTheme();
+
   return (
     <S.RecommendFormContainer>
       <S.RecommendFormTitleContainer>
@@ -33,7 +40,9 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
         )}
       </S.RecommendFormTitleContainer>
       <S.RecommendFormContentWrapper>{children}</S.RecommendFormContentWrapper>
-      <S.RecommendFormButton onClick={button.onClick}>{button.text}</S.RecommendFormButton>
+      <S.RecommendFormButton {...(!isLoading && { onClick: button.onClick })} isLoading={isLoading}>
+        {isLoading ? <Spinner color={theme.white} size={1.46} /> : button.text}
+      </S.RecommendFormButton>
     </S.RecommendFormContainer>
   );
 };
