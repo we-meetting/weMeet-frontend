@@ -54,6 +54,16 @@ export const NavbarLogoImg = styled.img`
   }
 `;
 
+export const NavbarLogoText = styled(Link)`
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.default};
+  @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
+  }
+`;
+
 export const NavbarContentListStyle = styled.ul`
   display: flex;
   justify-content: center;

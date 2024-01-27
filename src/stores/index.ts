@@ -1,3 +1,3 @@
 export * from './search';
-export * from './mapKeyword';
+export * from './map';
 export * from './makerInfo';

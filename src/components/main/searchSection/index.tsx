@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
-import { Modal, PlaceCard, Text } from 'src/components';
-import { useSearchBarStore } from 'src/stores';
+import { Modal, PlaceCard, Spinner, Text } from 'src/components';
+import { useMapStore, useSearchBarStore } from 'src/stores';
 import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
 import { useSearchQuery } from 'src/hooks/queries/useSearchQuery';
 import { useDebounce } from 'src/hooks/useDebounce';
@@ -54,7 +54,7 @@ const SearchInput: React.FC = () => {
 
   const { windowSize } = useGetWindowSize();
 
-  const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
+  const { dynamicPlaceholder, category } = useSearchBarStore.subject();
   const { setSearchHistory } = useSearchBarStore.history();
   const { setSearchText, searchText } = useSearchBarStore.search();
 
@@ -68,8 +68,7 @@ const SearchInput: React.FC = () => {
 
   const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSearchHistory(e.currentTarget['keyword'].value as string);
-    setSearchText('');
+    setSearchHistory(e.currentTarget['keyword'].value as string, category);
     if (!searchInputRef.current) return;
     searchInputRef.current.focus();
   };
@@ -78,7 +77,12 @@ const SearchInput: React.FC = () => {
     if (!searchInputRef.current) return;
 
     isModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
+    !isModalOpen && setSearchText('');
   }, [isModalOpen]);
+
+  useEffect(() => {
+    setSearchText('');
+  }, [category]);
 
   return (
     <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen}>
@@ -111,7 +115,11 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
-  const { searchText } = useSearchBarStore.search();
+  const navigate = useNavigate();
+
+  const { category } = useSearchBarStore.subject();
+  const { searchText, setSearchText } = useSearchBarStore.search();
+  const { setMapKeyword, setMapAddress } = useMapStore();
 
   const { debouncedValue } = useDebounce(searchText, 200);
 
@@ -119,6 +127,10 @@ const SearchBarRecommendContainer: React.FC = () => {
     keyword: debouncedValue,
     enabled: debouncedValue.length > 0,
   });
+
+  const formatDataTitle = (title: string) => {
+    return title.replace(/<b>/gi, '').replace(/<\/b>/gi, '');
+  };
 
   const theme = useTheme();
 
@@ -129,29 +141,61 @@ const SearchBarRecommendContainer: React.FC = () => {
 
   const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
 
+  const dataCardClick = (address: string, y: string, x: string) => {
+    const formatAddress = address.replace(/(\s[^\s]*층.*)/g, '');
+    setMapKeyword(formatAddress);
+
+    const formatPosition = {
+      lat: y.slice(0, 2) + '.' + y.slice(2),
+      lng: x.slice(0, 3) + '.' + x.slice(3),
+    };
+    setMapAddress(formatPosition.lat, formatPosition.lng);
+
+    navigate('/map');
+  };
+
   useEffect(() => {
     if (!searchBarRecommendRef.current) return;
 
-    const { scrollHeight } = searchBarRecommendRef.current;
-    searchBarRecommendRef.current.style.height = isModalOpen ? `${scrollHeight}px` : '0';
-  }, [isModalOpen, searchHistory]);
+    searchBarRecommendRef.current.style.height = isModalOpen ? `auto` : '0px';
+  }, [isModalOpen, searchHistory, data]);
 
   useEffect(() => {
-    getSearchHistory();
-  }, []);
+    getSearchHistory(category);
+  }, [category]);
 
   return (
     <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
-      <PlaceCard main="주변" isLast />
-      <S.SearchRecommendTextWrapper>
-        <Text size={0.8} weight={600} mobileBigText>
-          최근 본 항목
-        </Text>
-      </S.SearchRecommendTextWrapper>
-      {data ? (
+      {!debouncedValue && (
+        <>
+          <PlaceCard main="주변" isLast />
+          <S.SearchRecommendTextWrapper>
+            <Text size={0.8} weight={600} mobileBigText>
+              최근 본 항목
+            </Text>
+          </S.SearchRecommendTextWrapper>
+        </>
+      )}
+      {isLoading && !data ? (
+        <S.LoadingWrapper>
+          <Spinner color={theme.placeholder} />
+        </S.LoadingWrapper>
+      ) : debouncedValue.length > 0 && data && data.result.length === 0 ? (
+        <S.LoadingWrapper>
+          <Text size={0.8} color={theme.placeholder} mobileBigText>
+            검색 결과가 없어요
+          </Text>
+        </S.LoadingWrapper>
+      ) : data ? (
         <>
           {data.result.map(({ info }, i) => (
-            <div>{info.title}</div>
+            <PlaceCard
+              main={formatDataTitle(info.title)}
+              key={i}
+              isLast={data.result.slice(-5).length - 1 === i}
+              location={info.address}
+              onClick={() => dataCardClick(info.title, info.mapy, info.mapx)}
+            />
           ))}
         </>
       ) : searchHistory.length > 0 ? (
@@ -160,7 +204,12 @@ const SearchBarRecommendContainer: React.FC = () => {
             .slice(-5)
             .reverse()
             .map((history, i) => (
-              <PlaceCard main={history} key={i} isLast={searchHistory.slice(-5).length - 1 === i} />
+              <PlaceCard
+                main={history}
+                key={i}
+                isLast={searchHistory.slice(-5).length - 1 === i}
+                onClick={() => setSearchText(history)}
+              />
             ))}
         </>
       ) : (

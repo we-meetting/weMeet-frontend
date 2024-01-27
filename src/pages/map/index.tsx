@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Marker, MarkerProps } from 'src/components';
-import { useMakerInfoStore, useMapKeywordStore } from 'src/stores';
+import { useMakerInfoStore, useMapStore } from 'src/stores';
 
 export const MapPage: React.FC = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ export const MapPage: React.FC = () => {
   const dataLocation = queryParams.get('location');
   const placeName = queryParams.get('placeName');
 
-  const { mapKeyword } = useMapKeywordStore();
+  const { mapKeyword, mapAddress } = useMapStore();
   const { resetMakerInfo } = useMakerInfoStore();
 
   const [] = useKakaoLoader({
@@ -37,8 +37,8 @@ export const MapPage: React.FC = () => {
         if (status === kakao.maps.services.Status.OK) {
           const markers = data.map((item) => {
             const position = {
-              lat: +item.y,
-              lng: +item.x,
+              lat: mapAddress.lat ? +mapAddress.lat : +item.y,
+              lng: mapAddress.lng ? +mapAddress.lng : +item.x,
             };
             bounds.extend(new kakao.maps.LatLng(position.lat, position.lng));
             return {

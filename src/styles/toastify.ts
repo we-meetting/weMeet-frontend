@@ -12,7 +12,6 @@ export const toastify = css`
   }
 
   .Toastify__toast-theme--light {
-    background: rgba(255, 255, 255, 0.6);
     border-radius: 0.6rem;
     box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(7.4px);
