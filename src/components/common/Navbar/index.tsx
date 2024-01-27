@@ -8,7 +8,7 @@ import { useTheme } from '@emotion/react';
 import { LogoSvg } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
-import { useMapKeywordStore } from 'src/stores';
+import { useMapStore } from 'src/stores';
 
 import { Text } from '../Text';
 
@@ -25,7 +25,7 @@ export interface SearchInterface {
 export const Navbar: React.FC = () => {
   const theme = useTheme();
 
-  const { setMapKeyword: setMapKeyword } = useMapKeywordStore();
+  const { setMapKeyword: setMapKeyword } = useMapStore();
 
   const { windowSize } = useGetWindowSize();
 
@@ -66,9 +66,7 @@ export const Navbar: React.FC = () => {
         <S.NavbarInnerContainer>
           <S.NavbarLogoContainer>
             <S.NavbarLogoImg src={LogoSvg} alt="hello" />
-            <Text size={1.8} weight={700} mobileBigText>
-              weMeet
-            </Text>
+            <S.NavbarLogoText to="/">weMeet</S.NavbarLogoText>
           </S.NavbarLogoContainer>
           <AnimatePresence>
             {isMapPage && (

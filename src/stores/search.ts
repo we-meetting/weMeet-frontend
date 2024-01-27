@@ -5,10 +5,12 @@ import { SearchBarContentItem } from 'src/constants';
 export interface SearchSubjectStore {
   dynamicPlaceholder: '음식점, 즐길 거리, 동네 등 ' | '음식점, 카페' | '관광 명소, 놀이공원';
   dynamicTitle: '어디로 가시나요?' | '음식점 찾기' | '재밌는 체험 하기';
+  category: SearchBarContentItem['text'];
   setSubject: (subject: SearchBarContentItem['text']) => void;
 }
 
 export const useSearchSubjectStore = create<SearchSubjectStore>((set) => ({
+  category: '전체 검색',
   dynamicPlaceholder: '음식점, 즐길 거리, 동네 등 ',
   dynamicTitle: '어디로 가시나요?',
   setSubject: (subject) => {
@@ -17,18 +19,21 @@ export const useSearchSubjectStore = create<SearchSubjectStore>((set) => ({
         set({
           dynamicPlaceholder: '음식점, 즐길 거리, 동네 등 ',
           dynamicTitle: '어디로 가시나요?',
+          category: subject,
         });
         break;
       case '맛집 검색':
         set({
           dynamicPlaceholder: '음식점, 카페',
           dynamicTitle: '음식점 찾기',
+          category: subject,
         });
         break;
       case '즐길 거리':
         set({
           dynamicPlaceholder: '관광 명소, 놀이공원',
           dynamicTitle: '재밌는 체험 하기',
+          category: subject,
         });
         break;
       default:
@@ -39,24 +44,24 @@ export const useSearchSubjectStore = create<SearchSubjectStore>((set) => ({
 
 export interface SearchHistoryStore {
   searchHistory: string[];
-  setSearchHistory: (searchHistory: string) => void;
-  getSearchHistory: () => void;
+  setSearchHistory: (searchHistory: string, category: SearchBarContentItem['text']) => void;
+  getSearchHistory: (category: SearchBarContentItem['text']) => void;
 }
 
 export const useSearchHistoryStore = create<SearchHistoryStore>((set) => ({
   searchHistory: [],
-  setSearchHistory: (searchHistory) => {
+  setSearchHistory: (searchHistory, category) => {
     set((state) => ({
       searchHistory: [...state.searchHistory, searchHistory],
     }));
     localStorage.setItem(
-      'searchHistory',
+      category,
       JSON.stringify([
         ...new Set([searchHistory, ...(useSearchHistoryStore.getState().searchHistory ?? [])]),
       ]),
     );
     localStorage.setItem(
-      'searchHistory',
+      category,
       JSON.stringify(
         useSearchHistoryStore
           .getState()
@@ -67,16 +72,17 @@ export const useSearchHistoryStore = create<SearchHistoryStore>((set) => ({
       ),
     );
   },
-  getSearchHistory: () => {
-    const history = localStorage.getItem('searchHistory');
+  getSearchHistory: (category) => {
+    const history = localStorage.getItem(category);
     if (history) {
-      set((state) => ({
-        searchHistory: [...state.searchHistory, ...JSON.parse(history)],
+      set(() => ({
+        searchHistory: [...JSON.parse(history)],
+      }));
+    } else {
+      set(() => ({
+        searchHistory: [],
       }));
     }
-    set((state) => ({
-      searchHistory: [...state.searchHistory],
-    }));
   },
 }));
 
