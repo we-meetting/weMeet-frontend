@@ -8,7 +8,7 @@ import * as S from './styled';
 
 export interface MarkerProps {
   place_name: string;
-  place_url: string;
+  place_url?: string;
   position: {
     lat: number;
     lng: number;
@@ -48,18 +48,21 @@ export const Marker: React.FC<MarkerProps> = ({
       {makerInfo && makerInfo === place_name && (
         <CustomOverlayMap position={position} clickable yAnchor={2.8}>
           <S.MapMarkerBox>
-            <S.MapMarkerBoxLink to={place_url} target="_blank">
-              {place_name}
-            </S.MapMarkerBoxLink>
+            {place_url ? (
+              <S.MapMarkerBoxLink to={place_url} target="_blank">
+                {place_name}
+              </S.MapMarkerBoxLink>
+            ) : (
+              <S.MapMarkerBoxTitle>{place_name}</S.MapMarkerBoxTitle>
+            )}
             <S.MapMarkerBoxAddress>
-              {road_address_name}
+              {road_address_name}{' '}
               <S.MapMarkerBoxAddressLink
                 to={`https://map.kakao.com/link/to/${
                   id ? id : `${place_name},${position.lat},${position.lng}`
                 }`}
                 target="_blank"
               >
-                {' '}
                 (길찾기)
               </S.MapMarkerBoxAddressLink>
             </S.MapMarkerBoxAddress>

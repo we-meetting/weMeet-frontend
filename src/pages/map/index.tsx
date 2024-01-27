@@ -69,7 +69,6 @@ export const MapPage: React.FC = () => {
                 lng: +data[0].x,
               },
               place_name: placeName || '',
-              place_url: '',
               road_address_name: data[0].address_name,
             },
           ]);
