@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { Theme } from '@emotion/react';
-
 import * as S from './styled';
 
 export interface TextCommonProps {
   weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   size?: number;
-  color?: keyof Theme;
+  color?: string;
   mobileBigText?: boolean;
 }
 

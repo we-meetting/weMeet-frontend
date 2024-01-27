@@ -1,17 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { RecommendForm } from 'src/components';
-import { RECOMMEND_CONTENTS_LIST } from 'src/constants';
-import { useGetWindowSize } from 'src/hooks';
+import { AnimatePresence } from 'framer-motion';
+
+import { Input, RecommendForm, Text } from 'src/components';
+import { useGetWindowSize, useRecommendMutation } from 'src/hooks';
+import { RecommendResponse } from 'src/api';
+import { useFadeInScroll } from 'src/hooks';
 
 import * as S from './styled';
 
+export interface RecommendForm {
+  city: string;
+  district: string;
+  region: string;
+}
+
 export const RecommendPage: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
+  const { data, mutate, isLoading } = useRecommendMutation();
+  const recommendData = data?.result;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RecommendForm>();
+
+  const [isTodo, setIsTodo] = useState<boolean>(false);
+  const [isResultSection, setIsResultSection] = useState<boolean>(false);
+
   const { windowSize } = useGetWindowSize();
 
   const itemNum = windowSize > 768 ? 5 : 4;
 
-  const splitRecommendContentsList = (list: string[]) => {
+  const splitRecommendContentsList = (list: RecommendResponse[]) => {
     const result = [];
     for (let i = 0; i < list.length; i += itemNum) {
       result.push(list.slice(i, i + itemNum));
@@ -19,26 +43,90 @@ export const RecommendPage: React.FC = () => {
     return result;
   };
 
+  const onHandleTodo = () => {
+    setIsTodo((prev) => !prev);
+  };
+
+  const onSubmit = ({ city, district, region }: RecommendForm) => {
+    setIsResultSection(true);
+    mutate({
+      city,
+      district,
+      region,
+      isTodo,
+    });
+  };
+
   return (
-    <RecommendForm
-      title="어떤 취향이신가요?"
-      subTitle="선택한 장소가 지도에 표시돼요!"
-      button={{
-        text: '다시 생성하기',
-        onClick() {
-          console.log('asdf');
-        },
-      }}
-    >
-      <S.RecommendContainer>
-        {splitRecommendContentsList(RECOMMEND_CONTENTS_LIST).map((list, index) => (
-          <S.RecommendButtonContainer key={index}>
-            {list.map((item, index) => (
-              <S.RecommendButton key={index}>{item}</S.RecommendButton>
+    <>
+      {!isLoading && recommendData && recommendData.length > 0 && isResultSection ? (
+        <RecommendForm
+          title="어떤 취향이신가요?"
+          subTitle="선택한 장소가 지도에 표시돼요!"
+          button={{
+            text: '다시 생성하기',
+            onClick: () => {
+              setIsResultSection(false);
+            },
+          }}
+        >
+          <S.RecommendResultContainer {...fadeInScroll({ delay: 0.2 })}>
+            {splitRecommendContentsList(
+              typeof recommendData === 'string' ? JSON.parse(recommendData) : recommendData,
+            ).map((list, index) => (
+              <S.RecommendResultCardContainer key={index}>
+                {list.map(({ location, name }, index) => (
+                  <S.RecommendResultCard key={index}>
+                    <S.RecommendResultCardLink to={`/map/?location=${location}&placeName=${name}`}>
+                      {name}
+                    </S.RecommendResultCardLink>
+                  </S.RecommendResultCard>
+                ))}
+              </S.RecommendResultCardContainer>
             ))}
-          </S.RecommendButtonContainer>
-        ))}
-      </S.RecommendContainer>
-    </RecommendForm>
+          </S.RecommendResultContainer>
+        </RecommendForm>
+      ) : (
+        <RecommendForm
+          title="지역을 알려주세요!"
+          button={{
+            text: '생성하기',
+            onClick: handleSubmit(onSubmit),
+          }}
+          isLoading={isLoading}
+        >
+          <S.RecommendContainer>
+            <Input
+              {...register('city', { required: '올바른 도시 이름을 입력해주세요' })}
+              label="도시"
+              message={errors.city?.message}
+              error={Boolean(errors.city?.message)}
+            />
+            <Input
+              {...register('district', { required: '올바른 구 이름을 입력해주세요' })}
+              label="구 (예: 마포구/강서구)"
+              message={errors.district?.message}
+              error={Boolean(errors.district?.message)}
+            />
+            <Input
+              {...register('region', { required: '올바른 장소 이름을 입력해주세요' })}
+              label="장소 (예: 홍대/신촌)"
+              message={errors.region?.message}
+              error={Boolean(errors.region?.message)}
+            />
+            <S.RecommendTypeContainer>
+              <Text size={1} weight={500} mobileBigText>
+                할 일
+              </Text>
+              <AnimatePresence>
+                <S.RecommendIconWrapper onClick={onHandleTodo} whileTap={{ scale: 0.8 }}>
+                  {isTodo ? <S.RecommendCheckFillIcon /> : <S.RecommendCheckOutlineIcon />}
+                </S.RecommendIconWrapper>
+              </AnimatePresence>
+            </S.RecommendTypeContainer>
+          </S.RecommendContainer>
+        </RecommendForm>
+      )}
+    </>
   );
 };

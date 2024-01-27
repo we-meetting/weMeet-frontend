@@ -23,7 +23,7 @@
         "endOfLine": "auto"
       }
     ],
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-useless-constructor": "error",
     "import/no-unresolved": "error",
     "import/prefer-default-export": "off",

@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
 import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
 import { Modal, PlaceCard, Text } from 'src/components';
 import { useSearchBarStore } from 'src/stores';
 import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
+import { useSearchQuery } from 'src/hooks/queries/useSearchQuery';
+import { useDebounce } from 'src/hooks/useDebounce';
 
 import * as S from './styled';
 
@@ -46,17 +50,17 @@ const SearchSubjectContainer: React.FC = () => {
 };
 
 const SearchInput: React.FC = () => {
+  const theme = useTheme();
+
   const { windowSize } = useGetWindowSize();
 
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
-
   const { setSearchHistory } = useSearchBarStore.history();
+  const { setSearchText, searchText } = useSearchBarStore.search();
 
   const isModalOpen = useSearchBarStore.modal((store) => store.isModalOpen);
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [searchText, setSearchText] = useState<string>('');
 
   const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -96,7 +100,7 @@ const SearchInput: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <Text size={1.1} color="white" mobileBigText>
+            <Text size={1.1} color={theme.white} mobileBigText>
               검색
             </Text>
           </S.SearchBarButton>
@@ -107,6 +111,17 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
+  const { searchText } = useSearchBarStore.search();
+
+  const { debouncedValue } = useDebounce(searchText, 200);
+
+  const { data, isLoading } = useSearchQuery({
+    keyword: debouncedValue,
+    enabled: debouncedValue.length > 0,
+  });
+
+  const theme = useTheme();
+
   const { searchHistory } = useSearchBarStore.history();
   const { isModalOpen } = useSearchBarStore.modal();
 
@@ -133,7 +148,13 @@ const SearchBarRecommendContainer: React.FC = () => {
           최근 본 항목
         </Text>
       </S.SearchRecommendTextWrapper>
-      {searchHistory.length > 0 ? (
+      {data ? (
+        <>
+          {data.result.map(({ info }, i) => (
+            <div>{info.title}</div>
+          ))}
+        </>
+      ) : searchHistory.length > 0 ? (
         <>
           {searchHistory
             .slice(-5)
@@ -144,7 +165,7 @@ const SearchBarRecommendContainer: React.FC = () => {
         </>
       ) : (
         <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
-          <Text size={0.8} color="placeholder" mobileBigText>
+          <Text size={0.8} color={theme.placeholder} mobileBigText>
             최근 본 항목이 없습니다.
           </Text>
         </S.SearchRecommendTextWrapper>

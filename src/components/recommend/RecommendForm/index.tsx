@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { motion } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
-import { Text } from 'src/components/common';
-import { useFadeInScroll } from 'src/hooks';
+import { Text, Spinner } from 'src/components';
 
 import * as S from './styled';
 
-export interface RecommendFormProps {
+export type RecommendFormProps = Pick<React.HTMLAttributes<HTMLFormElement>, 'onSubmit'> & {
   title: string;
   subTitle?: string;
   button: {
@@ -15,18 +14,21 @@ export interface RecommendFormProps {
     onClick: () => void;
   };
   children: React.ReactNode;
-}
+  isLoading?: boolean;
+};
 
 export const RecommendForm: React.FC<RecommendFormProps> = ({
   title,
   subTitle,
   button,
   children,
+  isLoading = false,
 }) => {
-  const { fadeInScroll } = useFadeInScroll();
+  const theme = useTheme();
+
   return (
     <S.RecommendFormContainer>
-      <S.RecommendFormTitleContainer {...fadeInScroll({ delay: 0 })}>
+      <S.RecommendFormTitleContainer>
         <Text size={2.6} weight={700}>
           {title}
         </Text>
@@ -36,9 +38,9 @@ export const RecommendForm: React.FC<RecommendFormProps> = ({
           </Text>
         )}
       </S.RecommendFormTitleContainer>
-      <motion.div {...fadeInScroll({ delay: 0.4 })}>{children}</motion.div>
-      <S.RecommendFormButton onClick={button.onClick} {...fadeInScroll({ delay: 0.6 })}>
-        {button.text}
+      <S.RecommendFormContentWrapper>{children}</S.RecommendFormContentWrapper>
+      <S.RecommendFormButton {...(!isLoading && { onClick: button.onClick })} isLoading={isLoading}>
+        {isLoading ? <Spinner color={theme.white} size={1.46} /> : button.text}
       </S.RecommendFormButton>
     </S.RecommendFormContainer>
   );

@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
-import { Logo } from 'src/assets';
+import { LogoSvg } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
 import { useMapKeywordStore } from 'src/stores';
@@ -22,7 +23,9 @@ export interface SearchInterface {
 }
 
 export const Navbar: React.FC = () => {
-  const { setMapKeyword } = useMapKeywordStore();
+  const theme = useTheme();
+
+  const { setMapKeyword: setMapKeyword } = useMapKeywordStore();
 
   const { windowSize } = useGetWindowSize();
 
@@ -62,7 +65,7 @@ export const Navbar: React.FC = () => {
       <S.NavbarContainer isScroll={isScroll} isMapPage={isMapPage}>
         <S.NavbarInnerContainer>
           <S.NavbarLogoContainer>
-            <S.NavbarLogoImg src={Logo} alt="hello" />
+            <S.NavbarLogoImg src={LogoSvg} alt="hello" />
             <Text size={1.8} weight={700} mobileBigText>
               weMeet
             </Text>
@@ -87,7 +90,7 @@ export const Navbar: React.FC = () => {
           </S.NavbarContentList>
           <S.NavbarLoginWrapper>
             <S.NavbarLoginInnerWrapper>
-              <Text color="white" mobileBigText>
+              <Text color={theme.white} mobileBigText>
                 로그인
               </Text>
             </S.NavbarLoginInnerWrapper>

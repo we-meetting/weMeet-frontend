@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastContainer } from 'react-toastify';
 
 import { Global, Theme, ThemeProvider } from '@emotion/react';
 
@@ -6,15 +8,22 @@ import { lightTheme, globalStyle } from './styles';
 import { ModalProvider } from './providers';
 import { Router } from './Router';
 
+import 'react-toastify/dist/ReactToastify.css';
+
+const client = new QueryClient({ defaultOptions: { queries: { retry: 0 } } });
+
 export const App: React.FC = () => {
   const [theme] = useState<Theme>(lightTheme);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Global styles={[globalStyle]} />
-      <ModalProvider>
-        <Router />
-      </ModalProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <Global styles={[globalStyle]} />
+        <ToastContainer position="top-right" theme="light" autoClose={3000} closeButton={false} />
+        <ModalProvider>
+          <Router />
+        </ModalProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
