@@ -15,11 +15,20 @@ export const MapMarkerBox = styled.div`
   cursor: pointer;
 `;
 
+export const MapMarkerBoxTitle = styled.h3`
+  color: ${({ theme }) => theme.primary};
+  font-size: 14px;
+  font-weight: 500;
+`;
+
 export const MapMarkerBoxLink = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.primary};
   font-size: 14px;
   font-weight: 500;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const MapMarkerBoxAddress = styled.p`
@@ -30,4 +39,7 @@ export const MapMarkerBoxAddress = styled.p`
 export const MapMarkerBoxAddressLink = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.primary};
+  &:hover {
+    border-bottom: 1px solid ${({ theme }) => theme.primary};
+  }
 `;
