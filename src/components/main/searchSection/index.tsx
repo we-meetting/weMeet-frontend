@@ -55,23 +55,12 @@ const SearchInput: React.FC = () => {
   const { windowSize } = useGetWindowSize();
 
   const dynamicPlaceholder = useSearchBarStore.subject((store) => store.dynamicPlaceholder);
-
   const { setSearchHistory } = useSearchBarStore.history();
+  const { setSearchText, searchText } = useSearchBarStore.search();
 
   const isModalOpen = useSearchBarStore.modal((store) => store.isModalOpen);
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [searchText, setSearchText] = useState<string>('');
-
-  const { debouncedValue } = useDebounce(searchText, 200);
-
-  const { data, isLoading } = useSearchQuery({
-    keyword: debouncedValue,
-    enabled: debouncedValue.length > 0,
-  });
-
-  console.log(data);
 
   const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -122,6 +111,15 @@ const SearchInput: React.FC = () => {
 };
 
 const SearchBarRecommendContainer: React.FC = () => {
+  const { searchText } = useSearchBarStore.search();
+
+  const { debouncedValue } = useDebounce(searchText, 200);
+
+  const { data, isLoading } = useSearchQuery({
+    keyword: debouncedValue,
+    enabled: debouncedValue.length > 0,
+  });
+
   const theme = useTheme();
 
   const { searchHistory } = useSearchBarStore.history();
@@ -150,7 +148,13 @@ const SearchBarRecommendContainer: React.FC = () => {
           최근 본 항목
         </Text>
       </S.SearchRecommendTextWrapper>
-      {searchHistory.length > 0 ? (
+      {data ? (
+        <>
+          {data.result.map(({ info }, i) => (
+            <div>{info.title}</div>
+          ))}
+        </>
+      ) : searchHistory.length > 0 ? (
         <>
           {searchHistory
             .slice(-5)

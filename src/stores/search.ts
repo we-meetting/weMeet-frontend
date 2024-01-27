@@ -100,8 +100,23 @@ export const useSearchBarModalStore = create<SearchBarModalStore>((set) => ({
   },
 }));
 
+export interface SearchStore {
+  searchText: string;
+  setSearchText: (searchText: string) => void;
+}
+
+export const useSearchStore = create<SearchStore>((set) => ({
+  searchText: '',
+  setSearchText: (searchText) => {
+    set({
+      searchText,
+    });
+  },
+}));
+
 export const useSearchBarStore = Object.assign(useSearchSubjectStore, {
   subject: useSearchSubjectStore,
   history: useSearchHistoryStore,
   modal: useSearchBarModalStore,
+  search: useSearchStore,
 });

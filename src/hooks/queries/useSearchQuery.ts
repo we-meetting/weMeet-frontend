@@ -8,7 +8,7 @@ import { APIResponse, SearchValue, SearchResponse, search } from 'src/api';
 export const useSearchQuery = ({
   keyword,
   enabled,
-}: SearchValue): UseQueryResult<APIResponse<SearchResponse>, AxiosError<APIResponse<void>>> => {
+}: SearchValue): UseQueryResult<APIResponse<SearchResponse[]>, AxiosError<APIResponse<void>>> => {
   return useQuery(['useSearchQuery', keyword], () => search({ keyword }), {
     onError: (error) => {
       toast.error(error.response?.data.message);
