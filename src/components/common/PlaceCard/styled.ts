@@ -1,4 +1,5 @@
 import { BiNavigation } from 'react-icons/bi';
+import { IoLocationOutline } from 'react-icons/io5';
 
 import styled from '@emotion/styled';
 
@@ -42,6 +43,7 @@ export const PlaceCardIconWrapper = styled(ShadowBox)`
   border-radius: 50%;
   width: 2.4rem;
   height: 2.4rem;
+  padding: 0.4rem;
   @media screen and (max-width: 500px) {
     width: 2.6rem;
     height: 2.6rem;
@@ -56,10 +58,11 @@ export const PlaceCardTextContainer = styled.div`
 `;
 
 export const PlaceCardNavigationIcon = styled(BiNavigation)`
-  width: 1.3rem;
-  height: 1.3rem;
-  @media screen and (max-width: 500px) {
-    width: 1.6rem;
-    height: 1.6rem;
-  }
+  width: 100%;
+  height: 100%;
+`;
+
+export const PlaceCardLocationIcon = styled(IoLocationOutline)`
+  width: 100%;
+  height: 100%;
 `;

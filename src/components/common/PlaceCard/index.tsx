@@ -8,21 +8,22 @@ export interface PlaceCardProps {
   main: string;
   location?: string;
   isLast?: boolean;
+  onClick?: () => void;
 }
 
-export const PlaceCard: React.FC<PlaceCardProps> = ({ main, location, isLast }) => {
+export const PlaceCard: React.FC<PlaceCardProps> = ({ main, location, isLast, onClick }) => {
   return (
-    <S.PlaceCardContainer>
+    <S.PlaceCardContainer onClick={onClick}>
       <S.PlaceCardInnerContainer>
         <S.PlaceCardIconWrapper>
-          {location ? <S.PlaceCardNavigationIcon /> : <S.PlaceCardNavigationIcon />}
+          {location ? <S.PlaceCardLocationIcon /> : <S.PlaceCardNavigationIcon />}
         </S.PlaceCardIconWrapper>
         <S.PlaceCardTextContainer>
-          <Text size={1.04} weight={600} mobileBigText>
+          <Text size={1} weight={600} mobileBigText>
             {main}
           </Text>
           {location && (
-            <Text size={0.9} weight={400}>
+            <Text size={0.8} weight={300} mobileBigText>
               {location}
             </Text>
           )}

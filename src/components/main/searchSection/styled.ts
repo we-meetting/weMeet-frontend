@@ -178,3 +178,13 @@ export const SearchRecommendTextWrapper = styled.div`
     padding: 1rem;
   }
 `;
+
+export const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+  padding: 1rem;
+`;
