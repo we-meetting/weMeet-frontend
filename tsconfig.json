@@ -18,7 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
-    }
+    },
+    "types": ["kakao.maps.d.ts"]
   },
   "include": ["src", "commitlint.config.js", "src/components/common/AuthForm/index.tsx"]
 }

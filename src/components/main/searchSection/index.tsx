@@ -1,125 +1,258 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IoSearchOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@emotion/react';
 
-import { SEARCHBAR_CONTENT_LIST } from 'src/constants';
-import { Modal, Text } from 'src/components/';
+import { SEARCHBAR_CONTENT_LIST, SearchBarContentItem } from 'src/constants';
+import { Modal, PlaceCard, Spinner, Text } from 'src/components';
+import { useMapStore, useSearchBarStore } from 'src/stores';
+import { useFadeInScroll, useGetWindowSize } from 'src/hooks';
+import { useSearchQuery } from 'src/hooks/queries/useSearchQuery';
+import { useDebounce } from 'src/hooks/useDebounce';
 
 import * as S from './styled';
 
-export const SearchbarSection: React.FC = () => {
-  const searchBarRecommandRef = useRef<HTMLDivElement | null>(null);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
+const SearchSubjectContainer: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
 
-  const [searchSubject, setSearchSubject] = useState<string>('전체 검색');
+  const { setSubject } = useSearchBarStore.subject();
+
   const [selectedCategory, setSelectedCategory] = useState(
     SEARCHBAR_CONTENT_LIST.map((_, i) => (i === 0 ? true : false)),
   );
-  const [isSearchbarModalOpen, setIsSearchbarModalOpen] = useState<boolean>(false);
-
-  const searchbarModalOpen = () => {
-    setIsSearchbarModalOpen(true);
-  };
-
-  const searchbarModalClose = () => {
-    setIsSearchbarModalOpen(false);
-  };
 
   const onPressCategory = (index: number) => {
     setSelectedCategory((prev) => prev.map((_, i) => (i === index ? true : false)));
   };
 
-  const onChangeSearchSubject = (textValue: string, index: number) => {
+  const onChangeSearchSubject = (textValue: SearchBarContentItem['text'], index: number) => {
     onPressCategory(index);
-    setSearchSubject(textValue);
+    setSubject(textValue);
   };
 
-  let dynamicPlaceholder = '';
-  let dynamicTitle = '';
-  switch (searchSubject) {
-    case '전체 검색':
-      dynamicPlaceholder = '음식점, 즐길 거리, 동네 등 ';
-      dynamicTitle = '어디로 가시나요?';
-      break;
-    case '맛집 검색':
-      dynamicPlaceholder = '음식점, 카페';
-      dynamicTitle = '음식점 찾기';
-      break;
-    case '즐길 거리':
-      dynamicPlaceholder = '관광 명소, 놀이공원';
-      dynamicTitle = '재밌는 체험 하기';
-      break;
-    default:
-      dynamicPlaceholder = 'Search';
-  }
+  return (
+    <S.SearchSubjectContainer {...fadeInScroll({ delay: 0.2 })}>
+      {SEARCHBAR_CONTENT_LIST.map(({ text, icon }, i) => (
+        <S.SearchSubjectWrapper
+          onClick={() => onChangeSearchSubject(text, i)}
+          key={text}
+          isSelected={selectedCategory[i]}
+        >
+          <S.SearchSubjectIconWrapper>{icon}</S.SearchSubjectIconWrapper>
+          <Text size={1.1} weight={600} mobileBigText>
+            {text}{' '}
+          </Text>
+        </S.SearchSubjectWrapper>
+      ))}
+    </S.SearchSubjectContainer>
+  );
+};
+
+const SearchInput: React.FC = () => {
+  const theme = useTheme();
+
+  const { windowSize } = useGetWindowSize();
+
+  const { dynamicPlaceholder, category } = useSearchBarStore.subject();
+  const { setSearchHistory } = useSearchBarStore.history();
+  const { setSearchText, searchText } = useSearchBarStore.search();
+
+  const isModalOpen = useSearchBarStore.modal((store) => store.isModalOpen);
+
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+  const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearchHistory(e.currentTarget['keyword'].value as string, category);
+    if (!searchInputRef.current) return;
+    searchInputRef.current.focus();
+  };
 
   useEffect(() => {
-    if (!searchBarRecommandRef.current || !searchInputRef.current) return;
+    if (!searchInputRef.current) return;
 
-    const { scrollHeight } = searchBarRecommandRef.current;
-    searchBarRecommandRef.current.style.height = isSearchbarModalOpen ? `${scrollHeight}px` : '0';
+    isModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
+    !isModalOpen && setSearchText('');
+  }, [isModalOpen]);
 
-    isSearchbarModalOpen ? searchInputRef.current.focus() : searchInputRef.current.blur();
-  }, [isSearchbarModalOpen]);
+  useEffect(() => {
+    setSearchText('');
+  }, [category]);
+
+  return (
+    <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen}>
+      <S.SearchBarInputContainer onSubmit={onSearchSubmit}>
+        <S.SearchIcon />
+        <S.SearchBarInput
+          placeholder={dynamicPlaceholder}
+          ref={searchInputRef}
+          onChange={onChangeSearchText}
+          value={searchText}
+          name="keyword"
+        />
+      </S.SearchBarInputContainer>
+      <AnimatePresence>
+        {!isModalOpen && windowSize > 500 && (
+          <S.SearchBarButton
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <Text size={1.1} color={theme.white} mobileBigText>
+              검색
+            </Text>
+          </S.SearchBarButton>
+        )}
+      </AnimatePresence>
+    </S.SearchBarInnerContainer>
+  );
+};
+
+const SearchBarRecommendContainer: React.FC = () => {
+  const navigate = useNavigate();
+
+  const { category } = useSearchBarStore.subject();
+  const { searchText, setSearchText } = useSearchBarStore.search();
+  const { setMapKeyword, setMapAddress } = useMapStore();
+
+  const { debouncedValue } = useDebounce(searchText, 200);
+
+  const { data, isLoading } = useSearchQuery({
+    keyword: debouncedValue,
+    enabled: debouncedValue.length > 0,
+  });
+
+  const formatDataTitle = (title: string) => {
+    return title.replace(/<b>/gi, '').replace(/<\/b>/gi, '');
+  };
+
+  const theme = useTheme();
+
+  const { searchHistory } = useSearchBarStore.history();
+  const { isModalOpen } = useSearchBarStore.modal();
+
+  const { getSearchHistory } = useSearchBarStore.history();
+
+  const searchBarRecommendRef = useRef<HTMLDivElement | null>(null);
+
+  const dataCardClick = (address: string, y: string, x: string) => {
+    const formatAddress = address.replace(/(\s[^\s]*층.*)/g, '');
+    setMapKeyword(formatAddress);
+
+    const formatPosition = {
+      lat: y.slice(0, 2) + '.' + y.slice(2),
+      lng: x.slice(0, 3) + '.' + x.slice(3),
+    };
+    setMapAddress(formatPosition.lat, formatPosition.lng);
+
+    navigate('/map');
+  };
+
+  useEffect(() => {
+    if (!searchBarRecommendRef.current) return;
+
+    searchBarRecommendRef.current.style.height = isModalOpen ? `auto` : '0px';
+  }, [isModalOpen, searchHistory, data]);
+
+  useEffect(() => {
+    getSearchHistory(category);
+  }, [category]);
+
+  return (
+    <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
+      {!debouncedValue && (
+        <>
+          <PlaceCard main="주변" isLast />
+          <S.SearchRecommendTextWrapper>
+            <Text size={0.8} weight={600} mobileBigText>
+              최근 본 항목
+            </Text>
+          </S.SearchRecommendTextWrapper>
+        </>
+      )}
+      {isLoading && !data ? (
+        <S.LoadingWrapper>
+          <Spinner color={theme.placeholder} />
+        </S.LoadingWrapper>
+      ) : debouncedValue.length > 0 && data && data.result.length === 0 ? (
+        <S.LoadingWrapper>
+          <Text size={0.8} color={theme.placeholder} mobileBigText>
+            검색 결과가 없어요
+          </Text>
+        </S.LoadingWrapper>
+      ) : data ? (
+        <>
+          {data.result.map(({ info }, i) => (
+            <PlaceCard
+              main={formatDataTitle(info.title)}
+              key={i}
+              isLast={data.result.slice(-5).length - 1 === i}
+              location={info.address}
+              onClick={() => dataCardClick(info.title, info.mapy, info.mapx)}
+            />
+          ))}
+        </>
+      ) : searchHistory.length > 0 ? (
+        <>
+          {searchHistory
+            .slice(-5)
+            .reverse()
+            .map((history, i) => (
+              <PlaceCard
+                main={history}
+                key={i}
+                isLast={searchHistory.slice(-5).length - 1 === i}
+                onClick={() => setSearchText(history)}
+              />
+            ))}
+        </>
+      ) : (
+        <S.SearchRecommendTextWrapper style={{ paddingTop: 0 }}>
+          <Text size={0.8} color={theme.placeholder} mobileBigText>
+            최근 본 항목이 없습니다.
+          </Text>
+        </S.SearchRecommendTextWrapper>
+      )}
+    </S.SearchBarRecommendContainer>
+  );
+};
+
+export const SearchBarSection: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
+  const { searchHistory } = useSearchBarStore.history();
+
+  const { dynamicTitle } = useSearchBarStore.subject();
+
+  const { isModalOpen } = useSearchBarStore.modal();
+  const { openModal } = useSearchBarStore.modal();
+  const { closeModal } = useSearchBarStore.modal();
 
   return (
     <>
       <S.SearchContentsContainer>
-        <S.SearchTitleWrapper>
-          <Text size={2.8} weight={700}>
+        <S.SearchTitleWrapper {...fadeInScroll({ delay: 0.2 })}>
+          <Text size={2.6} weight={800}>
             {dynamicTitle}
           </Text>
         </S.SearchTitleWrapper>
-        <S.SearchSubjectContainer>
-          {SEARCHBAR_CONTENT_LIST.map(({ text, image }, i) => (
-            <S.SearchSubjectWrapper
-              onClick={() => onChangeSearchSubject(text, i)}
-              key={text}
-              isSelected={selectedCategory[i]}
-            >
-              <S.SearchSubjectIcon src={image} alt="아이콘" />
-              <Text size={1.1} weight={600}>
-                {text}{' '}
-              </Text>
-            </S.SearchSubjectWrapper>
-          ))}
-        </S.SearchSubjectContainer>
-        {isSearchbarModalOpen && (
-          <Modal.Overlay type="searchbar" onCloseClick={searchbarModalClose} />
-        )}
-        <S.SearchbarContainer
-          onClick={searchbarModalOpen}
-          searchBarModalOpen={isSearchbarModalOpen}
+        <SearchSubjectContainer />
+        {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
+        <S.SearchBarContainer
+          onClick={openModal}
+          searchBarModalOpen={isModalOpen}
+          {...fadeInScroll({ delay: 0.2 })}
+          isSearchHistoryFull={searchHistory.length == 5}
         >
-          <S.SearchbarInnerContainer searchBarModalOpen={isSearchbarModalOpen}>
-            <S.SearchbarInputContainer>
-              <IoSearchOutline size={'1.6rem'} />
-              <S.SearchbarInput placeholder={dynamicPlaceholder} ref={searchInputRef} />
-            </S.SearchbarInputContainer>
-            <AnimatePresence>
-              {!isSearchbarModalOpen && (
-                <S.SearchbarButton
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  <Text size={1.1} weight={400}>
-                    검색
-                  </Text>
-                </S.SearchbarButton>
-              )}
-            </AnimatePresence>
-          </S.SearchbarInnerContainer>
-          <S.SearchbarRecommandContainer ref={searchBarRecommandRef}>
-            {Array.from({ length: 20 }).map((_, i) => (
-              <Text size={1.1} weight={600} key={i}>
-                잉기{' '}
-              </Text>
-            ))}
-          </S.SearchbarRecommandContainer>
-        </S.SearchbarContainer>
+          <SearchInput />
+          <SearchBarRecommendContainer />
+        </S.SearchBarContainer>
       </S.SearchContentsContainer>
     </>
   );

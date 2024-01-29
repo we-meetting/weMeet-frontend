@@ -4,7 +4,9 @@ import * as S from './styled';
 
 export interface TextCommonProps {
   weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-  size: number;
+  size?: number;
+  color?: string;
+  mobileBigText?: boolean;
 }
 
 export type TextProps = Partial<TextCommonProps> & {
@@ -19,9 +21,22 @@ export type TextProps = Partial<TextCommonProps> & {
  * @param {number} size - 폰트 사이즈
  * @param {number} weight - 폰트 굵기
  */
-export const Text: React.FC<TextProps> = ({ children, size = 1.1, weight = 400, style }) => {
+export const Text: React.FC<TextProps> = ({
+  children,
+  size,
+  weight = 500,
+  style,
+  color,
+  mobileBigText,
+}) => {
   return (
-    <S.TextElement size={size} weight={weight} style={style}>
+    <S.TextElement
+      size={size}
+      weight={weight}
+      style={style}
+      color={color}
+      mobileBigText={mobileBigText}
+    >
       {children}
     </S.TextElement>
   );

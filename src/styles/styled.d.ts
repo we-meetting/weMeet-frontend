@@ -12,5 +12,7 @@ declare module '@emotion/react' {
     placeholder: string;
     softWhite: string;
     warningRed: string;
+    primaryHover: string;
+    danger: string;
   }
 }

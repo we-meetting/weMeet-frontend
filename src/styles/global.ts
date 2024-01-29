@@ -1,9 +1,12 @@
 import { Theme, css } from '@emotion/react';
 
 import { reset } from './reset';
+import { toastify } from './toastify';
 
 export const globalStyle = (theme: Theme) => css`
   ${reset}
+  ${toastify}
+
   * {
     box-sizing: border-box;
     &:focus {
@@ -29,7 +32,6 @@ export const globalStyle = (theme: Theme) => css`
   #app,
   #root,
   #__next {
-    font-size: 14px;
     font-family: 'Pretendard Variable';
     font-weight: 400;
     font-style: normal;
@@ -58,7 +60,7 @@ export const globalStyle = (theme: Theme) => css`
       font-size: 12px;
     }
 
-    @media screen and (max-width: 500px) and (min-width: 300px) {
+    @media screen and (max-width: 500px) {
       font-size: 12px;
     }
   }
