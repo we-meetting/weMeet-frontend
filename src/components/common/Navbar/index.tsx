@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { AnimatePresence } from 'framer-motion';
 import { useTheme } from '@emotion/react';
 
+import { useModal } from 'src/providers/modal';
 import { LogoSvg } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
 import { useMapStore } from 'src/stores';
 
 import { Text } from '../Text';
+import { LoginModal } from '../modals/LoginModal';
 
 import * as S from './styled';
 
@@ -24,6 +26,11 @@ export interface SearchInterface {
 
 export const Navbar: React.FC = () => {
   const theme = useTheme();
+  const { open } = useModal();
+
+  const onLoginModalOpen = () => {
+    open({ children: <LoginModal /> });
+  }
 
   const { setMapKeyword: setMapKeyword } = useMapStore();
 
@@ -87,7 +94,7 @@ export const Navbar: React.FC = () => {
             ))}
           </S.NavbarContentList>
           <S.NavbarLoginWrapper>
-            <S.NavbarLoginInnerWrapper>
+            <S.NavbarLoginInnerWrapper onClick={onLoginModalOpen}>
               <Text color={theme.white} mobileBigText>
                 로그인
               </Text>

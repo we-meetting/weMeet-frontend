@@ -13,12 +13,9 @@ export const SearchContentsContainer = styled(motion.div)`
 `;
 
 export const SearchBarContainer = styled(motion.div)<{
-  searchBarModalOpen: boolean;
-  isSearchHistoryFull: boolean;
-}>`
-  background-color: ${({ theme }) => theme.white};
-  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
-  border: 2px solid ${({ theme }) => theme.softWhite};
+    searchBarModalOpen: boolean;
+    isSearchHistoryFull: boolean;
+  }>`
 
   display: flex;
   flex-direction: column;
