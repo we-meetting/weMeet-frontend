@@ -11,6 +11,7 @@ import {
 } from 'src/components/common/AuthForm';
 import { Text } from 'src/components/common/Text';
 import { useModal } from 'src/providers';
+import { onLogin } from 'src/api/auth';
 
 import { RegisterModal } from '../RegisterModal';
 
@@ -26,8 +27,11 @@ export const LoginModal: React.FC = () => {
     watch,
   } = useForm<AuthFormProps>();
 
+  // const { mutate } = useLogin({ email: '', password: '', name: '' });
+
   const onSubmit = async (data: AuthFormProps) => {
-    await console.log(data.email, data.password);
+    // await mutate({ email: data.email, password: data.password, name: data.name });
+    await onLogin({ email: data.email, password: data.password });
   };
 
   const onRegisterModalOpen = () => {

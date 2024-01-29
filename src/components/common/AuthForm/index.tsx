@@ -5,7 +5,7 @@ export interface AuthLayoutProps {
 }
 export interface AuthFormProps {
   email: string;
-  name: string | null;
+  name?: string | null;
   password: string;
 }
 

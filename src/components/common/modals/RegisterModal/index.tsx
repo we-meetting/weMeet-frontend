@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useTheme } from '@emotion/react';
@@ -10,6 +11,7 @@ import {
 } from 'src/components/common/AuthForm';
 import { Text } from 'src/components/common/Text';
 import { useModal } from 'src/providers';
+import { onRegister } from 'src/api/auth';
 
 import { LoginModal } from '../LoginModal';
 
@@ -26,9 +28,13 @@ export const RegisterModal: React.FC = () => {
     watch,
   } = useForm<AuthFormProps>();
 
+  // const { mutate } = useRegister({ email: '', password: '', name: '' });
+
   const onSubmit = async (data: AuthFormProps) => {
-    await console.log(data.email, data.name, data.password);
+    // await mutate();
+    await onRegister({ email: data.email, password: data.password, name: data.name });
   };
+
   const onLoginModalOpen = () => {
     close();
     open({ children: <LoginModal /> });
