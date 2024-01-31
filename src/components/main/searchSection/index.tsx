@@ -240,7 +240,7 @@ export const SearchBarSection: React.FC = () => {
           </Text>
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
-        {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
+        {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal}></Modal.Overlay>}
         <S.SearchBarContainer searchBarModalOpen={isModalOpen} {...fadeInScroll({ delay: 0.2 })}>
           <SearchInput />
           <SearchBarRecommendContainer />

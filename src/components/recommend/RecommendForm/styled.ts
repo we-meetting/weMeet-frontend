@@ -6,8 +6,6 @@ import { Container } from 'src/components/layouts';
 export const RecommendFormContainer = styled(Container)`
   width: 100%;
   height: 100%;
-  padding-top: 0;
-  padding-bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;

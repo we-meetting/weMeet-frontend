@@ -12,7 +12,6 @@ export const onLogin = async ({ email, password }: AuthFormProps) => {
       email: email,
       password: password,
     });
-    // const accessToken = response.data.result.accessToken;
     return response;
   } catch (err) {
     console.error(`It's Something Wrong with Login ${err}`);
@@ -26,8 +25,6 @@ export const onRegister = async ({ email, password, name }: AuthFormProps) => {
       password: password,
       name: name,
     });
-    // const accessToken = response.data.result.accessToken;
-    // return accessToken;
     console.log(response.data);
     return response.data;
   } catch (err) {
