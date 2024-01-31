@@ -14,6 +14,7 @@ export const PlaceCardContainer = styled.div`
     }
     background-color: ${({ theme }) => theme.softWhite};
     z-index: 999;
+    cursor: pointer;
   }
 `;
 

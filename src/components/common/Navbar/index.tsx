@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
 
   const onLoginModalOpen = () => {
     open({ children: <LoginModal /> });
-  }
+  };
 
   const { setMapKeyword: setMapKeyword } = useMapStore();
 

@@ -58,7 +58,7 @@ const SearchInput: React.FC = () => {
   const { setSearchHistory } = useSearchBarStore.history();
   const { setSearchText, searchText } = useSearchBarStore.search();
 
-  const isModalOpen = useSearchBarStore.modal((store) => store.isModalOpen);
+  const { isModalOpen, openModal } = useSearchBarStore.modal();
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -85,7 +85,7 @@ const SearchInput: React.FC = () => {
   }, [category]);
 
   return (
-    <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen}>
+    <S.SearchBarInnerContainer searchBarModalOpen={isModalOpen} onClick={openModal}>
       <S.SearchBarInputContainer onSubmit={onSearchSubmit}>
         <S.SearchIcon />
         <S.SearchBarInput
@@ -135,7 +135,7 @@ const SearchBarRecommendContainer: React.FC = () => {
   const theme = useTheme();
 
   const { searchHistory } = useSearchBarStore.history();
-  const { isModalOpen } = useSearchBarStore.modal();
+  const { isModalOpen, closeModal } = useSearchBarStore.modal();
 
   const { getSearchHistory } = useSearchBarStore.history();
 
@@ -151,6 +151,7 @@ const SearchBarRecommendContainer: React.FC = () => {
     };
     setMapAddress(formatPosition.lat, formatPosition.lng);
 
+    closeModal();
     navigate('/map');
   };
 
@@ -226,13 +227,9 @@ const SearchBarRecommendContainer: React.FC = () => {
 export const SearchBarSection: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const { searchHistory } = useSearchBarStore.history();
-
   const { dynamicTitle } = useSearchBarStore.subject();
 
-  const { isModalOpen } = useSearchBarStore.modal();
-  const { openModal } = useSearchBarStore.modal();
-  const { closeModal } = useSearchBarStore.modal();
+  const { isModalOpen, closeModal } = useSearchBarStore.modal();
 
   return (
     <>
@@ -244,12 +241,7 @@ export const SearchBarSection: React.FC = () => {
         </S.SearchTitleWrapper>
         <SearchSubjectContainer />
         {isModalOpen && <Modal.Overlay type="searchBar" onCloseClick={closeModal} />}
-        <S.SearchBarContainer
-          onClick={openModal}
-          searchBarModalOpen={isModalOpen}
-          {...fadeInScroll({ delay: 0.2 })}
-          isSearchHistoryFull={searchHistory.length == 5}
-        >
+        <S.SearchBarContainer searchBarModalOpen={isModalOpen} {...fadeInScroll({ delay: 0.2 })}>
           <SearchInput />
           <SearchBarRecommendContainer />
         </S.SearchBarContainer>
