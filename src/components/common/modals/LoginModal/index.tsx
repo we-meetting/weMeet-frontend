@@ -23,14 +23,9 @@ export const LoginModal: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-    watch,
   } = useForm<AuthFormProps>();
 
-  // const { mutate } = useLogin({ email: '', password: '', name: '' });
-
   const onSubmit = async (data: AuthFormProps) => {
-    // await mutate({ email: data.email, password: data.password, name: data.name });
     await onLogin({ email: data.email, password: data.password });
   };
 

@@ -57,6 +57,8 @@ export const RecommendPage: React.FC = () => {
     });
   };
 
+  console.log(recommendData);
+
   return (
     <>
       {!isLoading && recommendData.length > 0 ? (

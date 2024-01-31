@@ -10,7 +10,6 @@ export interface RecommendStore {
 export const useRecommendDataStore = create<RecommendStore>((set) => ({
   recommendData: [],
   setRecommendData: (recommendData) => {
-    console.log(recommendData);
     set({ recommendData });
   },
 }));
