@@ -6,7 +6,4 @@ export const FOOD_IMAGE_LIST: string[] = [
   I.Food3Svg,
   I.Food4Svg,
   I.Food5Svg,
-  I.Food6Svg,
-  I.Food7Svg,
-  I.Food8Svg,
 ];
