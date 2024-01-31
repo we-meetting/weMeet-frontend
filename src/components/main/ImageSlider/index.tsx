@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 
 import { FOOD_IMAGE_LIST } from 'src/constants';
+import { useFadeInScroll } from 'src/hooks';
 
 import * as S from './styled';
 
 export const ImageSlider: React.FC = () => {
+  const { fadeInScroll } = useFadeInScroll();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handlePrevClick = () => {
@@ -14,13 +17,14 @@ export const ImageSlider: React.FC = () => {
   };
 
   const handleNextClick = () => {
+    console.log(currentImageIndex);
     setCurrentImageIndex((prevIndex) =>
       prevIndex === FOOD_IMAGE_LIST.length - 1 ? 0 : prevIndex + 1,
     );
   };
 
   return (
-    <S.ImageSliderContainer>
+    <S.ImageSliderContainer {...fadeInScroll({ delay: 0.4 })}>
       <S.ImageSliderIconWrapper left onClick={handlePrevClick}>
         <S.ImageSliderLeftIcon />
       </S.ImageSliderIconWrapper>
