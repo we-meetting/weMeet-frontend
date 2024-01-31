@@ -12,11 +12,7 @@ export const SearchContentsContainer = styled(motion.div)`
   align-items: center;
 `;
 
-export const SearchBarContainer = styled(motion.div)<{
-    searchBarModalOpen: boolean;
-    isSearchHistoryFull: boolean;
-  }>`
-
+export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,6 +21,10 @@ export const SearchBarContainer = styled(motion.div)<{
   width: 50rem;
   z-index: ${({ searchBarModalOpen }) => (searchBarModalOpen ? 999 : 1)};
   transition: border-radius 150ms;
+  background-color: ${({ theme }) => theme.white};
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.12);
+  border: 2px solid ${({ theme }) => theme.softWhite};
+  margin-bottom: 2rem;
 
   @media screen and (max-width: 767px) {
     width: 476px;
@@ -33,7 +33,7 @@ export const SearchBarContainer = styled(motion.div)<{
     width: 100%;
   }
 
-  ${({ searchBarModalOpen, isSearchHistoryFull }) =>
+  ${({ searchBarModalOpen }) =>
     searchBarModalOpen
       ? css`
           padding: 1rem 0.4rem;
@@ -41,7 +41,6 @@ export const SearchBarContainer = styled(motion.div)<{
           row-gap: 1rem;
           border-radius: 1rem;
           border: none;
-          margin-bottom: ${isSearchHistoryFull ? '2rem' : '0'};
         `
       : css`
           border-radius: 5rem;

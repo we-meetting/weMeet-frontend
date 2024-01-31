@@ -7,6 +7,7 @@ import { Input, RecommendForm, Text } from 'src/components';
 import { useGetWindowSize, useRecommendMutation } from 'src/hooks';
 import { RecommendResponse } from 'src/api';
 import { useFadeInScroll } from 'src/hooks';
+import { useRecommendDataStore } from 'src/stores';
 
 import * as S from './styled';
 
@@ -19,8 +20,9 @@ export interface RecommendForm {
 export const RecommendPage: React.FC = () => {
   const { fadeInScroll } = useFadeInScroll();
 
-  const { data, mutate, isLoading } = useRecommendMutation();
-  const recommendData = data?.result;
+  const { mutate, isLoading } = useRecommendMutation();
+
+  const { recommendData, setRecommendData } = useRecommendDataStore();
 
   const {
     register,
@@ -29,7 +31,6 @@ export const RecommendPage: React.FC = () => {
   } = useForm<RecommendForm>();
 
   const [isTodo, setIsTodo] = useState<boolean>(false);
-  const [isResultSection, setIsResultSection] = useState<boolean>(false);
 
   const { windowSize } = useGetWindowSize();
 
@@ -48,7 +49,6 @@ export const RecommendPage: React.FC = () => {
   };
 
   const onSubmit = ({ city, district, region }: RecommendForm) => {
-    setIsResultSection(true);
     mutate({
       city,
       district,
@@ -59,14 +59,14 @@ export const RecommendPage: React.FC = () => {
 
   return (
     <>
-      {!isLoading && recommendData && recommendData.length > 0 && isResultSection ? (
+      {!isLoading && recommendData.length > 0 ? (
         <RecommendForm
           title="어떤 취향이신가요?"
           subTitle="선택한 장소가 지도에 표시돼요!"
           button={{
             text: '다시 생성하기',
             onClick: () => {
-              setIsResultSection(false);
+              setRecommendData([]);
             },
           }}
         >

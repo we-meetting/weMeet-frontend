@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useTheme } from '@emotion/react';
@@ -24,14 +23,9 @@ export const RegisterModal: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-    watch,
   } = useForm<AuthFormProps>();
 
-  // const { mutate } = useRegister({ email: '', password: '', name: '' });
-
   const onSubmit = async (data: AuthFormProps) => {
-    // await mutate();
     await onRegister({ email: data.email, password: data.password, name: data.name });
   };
 
