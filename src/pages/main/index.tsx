@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchBarSection } from 'src/components/main/searchSection';
+import { ImageSlider, SearchBarSection } from 'src/components';
 
 import * as S from './styled';
 
@@ -9,6 +9,7 @@ export const MainPage: React.FC = () => {
     <>
       <S.MainPageContainer>
         <SearchBarSection />
+        <ImageSlider />
       </S.MainPageContainer>
     </>
   );
