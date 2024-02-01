@@ -8,6 +8,10 @@ export const MainPageContainer = styled.div`
   justify-content: space-between;
   padding-top: 10rem;
   padding-bottom: 10rem;
+  @media screen and (max-width: 1500px) and (min-width: 1000px) {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
   @media screen and (max-width: 767px) {
     padding-bottom: 4rem;
   }
