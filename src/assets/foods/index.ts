@@ -1,5 +1,6 @@
-export { default as Food1Svg } from './food1.svg';
-export { default as Food2Svg } from './food2.svg';
-export { default as Food3Svg } from './food3.svg';
-export { default as Food4Svg } from './food4.svg';
-export { default as Food5Svg } from './food5.svg';
+export { default as Food1Jpg } from './food1.jpg';
+export { default as Food2Jpg } from './food2.jpg';
+export { default as Food3Jpg } from './food3.jpg';
+export { default as Food4Jpg } from './food4.jpg';
+export { default as Food5Jpg } from './food5.jpg';
+export { default as Food6Jpg } from './food6.jpg';
