@@ -3,16 +3,11 @@ import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { AnimatePresence } from 'framer-motion';
-import { useTheme } from '@emotion/react';
 
-import { useModal } from 'src/providers/modal';
 import { LogoSvg } from 'src/assets';
 import { NAVBAR_CONTENT_LIST, NavbarContentItem } from 'src/constants';
 import { useGetWindowSize } from 'src/hooks';
 import { useMapStore } from 'src/stores';
-
-import { Text } from '../Text';
-import { LoginModal } from '../modals/LoginModal';
 
 import * as S from './styled';
 
@@ -25,18 +20,7 @@ export interface SearchInterface {
 }
 
 export const Navbar: React.FC = () => {
-  const theme = useTheme();
-  const { open } = useModal();
-
-  const onLoginModalOpen = () => {
-    open({ children: <LoginModal /> });
-  };
-
   const { setMapKeyword: setMapKeyword } = useMapStore();
-
-  const { windowSize } = useGetWindowSize();
-
-  const { handleSubmit, register, setValue } = useForm<SearchInterface>();
 
   const NavbarSearchBar: React.FC = () => {
     return (
@@ -49,6 +33,10 @@ export const Navbar: React.FC = () => {
       </S.NavbarSearchBarWrapper>
     );
   };
+
+  const { windowSize } = useGetWindowSize();
+
+  const { handleSubmit, register, setValue } = useForm<SearchInterface>();
 
   const { pathname } = useLocation();
   const isMapPage = pathname.includes('map');
@@ -93,13 +81,7 @@ export const Navbar: React.FC = () => {
               <NavbarContent key={i} {...props} />
             ))}
           </S.NavbarContentList>
-          <S.NavbarLoginWrapper>
-            <S.NavbarLoginInnerWrapper onClick={onLoginModalOpen}>
-              <Text color={theme.white} mobileBigText>
-                로그인
-              </Text>
-            </S.NavbarLoginInnerWrapper>
-          </S.NavbarLoginWrapper>
+          <S.NavbarLoginWrapper></S.NavbarLoginWrapper>
         </S.NavbarInnerContainer>
         <S.NavbarMobileContentList isMapPage={isMapPage}>
           {NAVBAR_CONTENT_LIST.map((props, i) => (

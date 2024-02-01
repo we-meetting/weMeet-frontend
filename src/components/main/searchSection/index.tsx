@@ -155,6 +155,11 @@ const SearchBarRecommendContainer: React.FC = () => {
     navigate('/map');
   };
 
+  const cardClick = () => {
+    closeModal();
+    navigate('/map');
+  };
+
   useEffect(() => {
     if (!searchBarRecommendRef.current) return;
 
@@ -169,7 +174,7 @@ const SearchBarRecommendContainer: React.FC = () => {
     <S.SearchBarRecommendContainer ref={searchBarRecommendRef}>
       {!debouncedValue && (
         <>
-          <PlaceCard main="주변" isLast />
+          <PlaceCard main="주변" isLast onClick={cardClick} />
           <S.SearchRecommendTextWrapper>
             <Text size={0.8} weight={600} mobileBigText>
               최근 본 항목

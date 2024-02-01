@@ -8,7 +8,9 @@ export const toastify = css`
   .Toastify__toast {
     font-size: 0.9rem;
     line-height: 120%;
-    border: 1px solid red;
+    @media screen and (max-width: 500px) {
+      font-size: 1.1rem;
+    }
   }
 
   .Toastify__toast-theme--light {

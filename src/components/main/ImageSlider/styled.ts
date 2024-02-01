@@ -4,16 +4,22 @@ import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
 export const ImageSliderContainer = styled(motion.div)`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   width: 100%;
   max-width: 1140px;
   margin: 0 auto;
+  padding-bottom: 2rem;
 
   @media screen and (max-width: 991px) {
     padding-left: 3.2rem;
     padding-right: 3.2rem;
   }
   @media screen and (max-width: 500px) {
+    position: relative;
     padding: 0;
     align-items: center;
   }

@@ -36,8 +36,6 @@ export const SearchBarContainer = styled(motion.div)<{ searchBarModalOpen: boole
   ${({ searchBarModalOpen }) =>
     searchBarModalOpen
       ? css`
-          position: fixed;
-          top: 29%;
           padding: 1rem 0.4rem;
           padding-top: 0.4rem;
           row-gap: 1rem;
